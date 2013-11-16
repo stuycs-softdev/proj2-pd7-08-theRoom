@@ -45,17 +45,37 @@ def reviewsByName(movie_name):
 	movieID = movies[0]['id']
 	return reviews(movieID)
 
+def reviewText(review):
+	page = ""
+	try:
+		page = urllib2.urlopen(review['links']['review']).read()
+	except urllib2.HTTPError:
+		return "404: " + review['publication']
+	if review['publication'] == u'Village Voice':
+		page = page[page.find("<div class='content_body'"):]
+		page = page[len("<div class='content_body sm'><p>") : page.find("</div>")]
+		return page
+
+	if review['publication'] == u'Chicago Reader':
+		tag = '<div class="filmShortBody" id="filmShortFull">'
+		endtag = '<span class="byline"'
+		page = page[page.find(tag) + len(tag) + 30 :]
+		page = page[: page.find(endtag) - 44]
+		return page
+
+	if review['publication'] == u'Variety':
+		tag = '<!-- Start Article Post Content -->'
+		endtag = '\n<div'
+		page = page[page.find(tag) + len(tag) + 50 :]
+		page = page[: page.find(endtag)]
+		return page
+	
+	print review
+	return "Not handled: " + review['publication']
 
 if __name__ == '__main__':
     movies = searchMovies("The Room")
-    print "Movies:",movies
     movieID = movies[0]['id']
-    print "MovieID:",movieID
-    movieInfo = movieInfo(movieID)
-    print "MovieInfo:",movieInfo
-    castInfo = castInfo(movieID)
-    print "CastInfo:",castInfo
     reviews = reviews(movieID)
-    print "Reviews:",reviews
-    similar = similarMovies(movieID)
-    print "Similar:",similar
+    for review in reviews['reviews']:
+    	print reviewText(review)
