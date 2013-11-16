@@ -104,10 +104,26 @@ def reviewText(review):
 		page = page[: page.find(endtag) - 10]
 		return stripWhitespace(cleanHTML(page))
 	
+	if review['publication'] == u'Newsday':
+		return "Not handled on purpose: no solid tag."
+
+	if review['publication'] == u'Richard Roeper.com':
+		return "Not handled on purpose: video reviews."
+	
+	if review['publication'] == u'Wall Street Journal':
+		return "Not handled on purpose: no solid tag."
+
+	if review['publication'] == u'San Francisco Chronicle':
+		return "Not handled on purpose: redirect."
+
+	#if review['publication'] == u'Film.com':
+	
+	
 	print review
 	return "Not handled: " + review['publication']
 
 def cleanHTML(text):
+	print text
 	old_text = ''
 	text = string.replace(text, '<br />', ' ')
 	while text != old_text:
@@ -124,5 +140,4 @@ if __name__ == '__main__':
     movieID = movies[0]['id']
     reviews = reviews(movieID)
     for review in reviews['reviews']:
-    	if review['publication'] == u'Time Out':
-    		print reviewText(review)
+    	print reviewText(review)
