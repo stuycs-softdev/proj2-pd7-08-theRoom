@@ -1,10 +1,12 @@
 from flask import Flask
+from flask import request, render_template
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-	return '<h3> Welcome to City 17! </h3>'
+	if request.method == "GET":
+		return render_template('home.html')
 
 if __name__ == '__main__':
 	app.debug = True
