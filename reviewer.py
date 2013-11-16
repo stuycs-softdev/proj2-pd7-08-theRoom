@@ -17,8 +17,15 @@ from random import choice
 #}
 
 
-# returns a list of keys, with there being weight instances of each key
 def weightedListofKeys(corpus):
+    out = []
+    for key in corpus:
+        for i in range(corpus[key]):
+            out.append(key)
+    return out
+
+# returns a list of keys, with there being weight instances of each key
+def weightedListofKeys2D(corpus):
     out = []
     for key in corpus:
         for k in corpus[key]:
@@ -30,12 +37,12 @@ def weightedListofKeys(corpus):
 from collections import defaultdict
 from re import sub, UNICODE
 
+START = -1
+END = -2
 # credit to Earwig for this (I got his permission to use it)
 # https://github.com/earwig/earwigbot/blob/develop/earwigbot/wiki/copyvios/markov.py
 def generateCorpus(text):
     """Implements a basic ngram Markov chain of words."""
-    START = -1
-    END = -2
     degree = 3  # 2 for bigrams, 3 for trigrams, etc.
     chain = defaultdict(lambda: defaultdict(lambda: 0))
     words = sub("[^\w\s-]", "", text.lower(), flags=UNICODE).split()
@@ -47,9 +54,15 @@ def generateCorpus(text):
     return chain
 
 
-corpus = generateCorpus("the quick the quick the quick the quick the quick")
-for key in corpus:
-    print key,':',corpus[key]
+def generateSentence(corpus):
+    pick = choice(weightedListofKeys2D(corpus))
+    sentence = str(pick[0]) + " "
+    while not END in pick:
+        sentence += str(pick[1]) + " " 
+        pick = (pick[1], choice(weightedListofKeys(corpus[pick])))
+    return sentence
 
-print "---"
-print weightedListofKeys(corpus)
+
+corpus = generateCorpus("the quick brown fox jumps over the lazy dog really quickly because he is a quick brown fox jumping over the lazy dog")
+
+print generateSentence(corpus)
