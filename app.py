@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request, render_template, redirect, url_for
+import rottenapi
 
 app = Flask(__name__)
 
@@ -17,7 +18,11 @@ def search(search_request=None):
 	if not search_request:
 		return redirect('home')
 
-	return render_template('search.html', search_request=search_request)
+	d = {'search_request': search_request}
+	reviews = rottenapi.reviewsByName(search_request)
+	d['reviews'] = reviews
+
+	return render_template('search.html', d=d)
 
 if __name__ == '__main__':
 	app.debug = True

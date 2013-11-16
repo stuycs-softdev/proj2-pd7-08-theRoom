@@ -40,6 +40,11 @@ def similarMovies(movieID):
     out = json.loads(results.read())
     return out
 
+def reviewsByName(movie_name):
+	movies = searchMovies(movie_name)
+	movieID = movies[0]['id']
+	return reviews(movieID)
+
 
 if __name__ == '__main__':
     movies = searchMovies("The Room")
