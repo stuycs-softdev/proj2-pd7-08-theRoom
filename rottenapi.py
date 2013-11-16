@@ -22,6 +22,25 @@ def movieInfo(movieID):
     out = json.loads(results.read())
     return out
 
+# get cast info for a movie id
+def castInfo(movieID):
+    results = urllib2.urlopen(getURL("movies/%s/cast.json?"%movieID))
+    out = json.loads(results.read())
+    return out
+
+# get reviews for a movie id
+def reviews(movieID):
+    results = urllib2.urlopen(getURL("movies/%s/reviews.json?"%movieID))
+    out = json.loads(results.read())
+    return out
+
+# get similar movies for a movie id
+def similarMovies(movieID):
+    results = urllib2.urlopen(getURL("movies/%s/similar.json?"%movieID))
+    out = json.loads(results.read())
+    return out
+
+
 if __name__ == '__main__':
     movies = searchMovies("The Room")
     print "Movies:",movies
@@ -29,4 +48,9 @@ if __name__ == '__main__':
     print "MovieID:",movieID
     movieInfo = movieInfo(movieID)
     print "MovieInfo:",movieInfo
-
+    castInfo = castInfo(movieID)
+    print "CastInfo:",castInfo
+    reviews = reviews(movieID)
+    print "Reviews:",reviews
+    similar = similarMovies(movieID)
+    print "Similar:",similar
