@@ -4,6 +4,7 @@ import urllib2
 import json
 import config
 import re
+import string
 
 apiroot = "http://api.rottentomatoes.com/api/public/v1.0/"
 
@@ -32,7 +33,7 @@ def castInfo(movieID):
 
 # get reviews for a movie id
 def reviews(movieID):
-    results = urllib2.urlopen(getURL("movies/%s/reviews.json?"%movieID))
+    results = urllib2.urlopen(getURL("movies/%s/reviews.json?review_type=top_critic"%movieID))
     out = json.loads(results.read())
     return out
 
@@ -72,20 +73,56 @@ def reviewText(review):
 		page = page[: page.find(endtag)]
 		return cleanHTML(page)
 	
+	if review['publication'] == u'New Yorker':
+		tag = '<p class="noindent">'
+		endtag = '</p>'
+		page = page[page.find(tag) + len(tag) :]
+		page = page[: page.find(endtag)]
+		return cleanHTML(page)
+
+	if review['publication'] == u'CNN.com':
+		tag = '<p ><b><b>(CNN)</b></b> -- '
+		endtag = '<br /> </p><!'
+		page = page[page.find(tag) + len(tag) :]
+		page = page[: page.find(endtag)]
+		return cleanHTML(page)
+	
+	if review['publication'] == u'The Wrap':
+		tag = '<div style="font-weight:bold;font-size:16px;"><p>'
+		endtag = '</div><!--content-area-->'
+		page = page[page.find(tag) + len(tag) :]
+		page = page[: page.find(endtag)]
+		return stripWhitespace(cleanHTML(page))
+	
+	if review['publication'] == u'Passionate Moviegoer':
+		return "Not handled on purpose: multiple reviews on same page."
+	
+	if review['publication'] == u'Time Out':
+		tag = '<p class="date">'
+		endtag = '<p class="articleAuthor module"'
+		page = page[page.find(tag) + len(tag) + 23 :]
+		page = page[: page.find(endtag) - 10]
+		return stripWhitespace(cleanHTML(page))
+	
 	print review
 	return "Not handled: " + review['publication']
 
 def cleanHTML(text):
 	old_text = ''
+	text = string.replace(text, '<br />', ' ')
 	while text != old_text:
 		old_text = text
 		text = re.sub('<[^<]+?>', '', text)
 	parser = HTMLParser()
 	return parser.unescape(text)
 
+def stripWhitespace(text):
+	return " ".join(text.split())
+
 if __name__ == '__main__':
-    movies = searchMovies("The Room")
+    movies = searchMovies("Toy Story 3")
     movieID = movies[0]['id']
     reviews = reviews(movieID)
     for review in reviews['reviews']:
-    	print reviewText(review)
+    	if review['publication'] == u'Time Out':
+    		print reviewText(review)
