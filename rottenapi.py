@@ -1,7 +1,9 @@
-import urllib2
 from urllib import quote_plus
+from HTMLParser import HTMLParser
+import urllib2
 import json
 import config
+import re
 
 apiroot = "http://api.rottentomatoes.com/api/public/v1.0/"
 
@@ -46,32 +48,40 @@ def reviewsByName(movie_name):
 	return reviews(movieID)
 
 def reviewText(review):
-	page = ""
 	try:
 		page = urllib2.urlopen(review['links']['review']).read()
 	except urllib2.HTTPError:
 		return "404: " + review['publication']
+
 	if review['publication'] == u'Village Voice':
 		page = page[page.find("<div class='content_body'"):]
 		page = page[len("<div class='content_body sm'><p>") : page.find("</div>")]
-		return page
+		return cleanHTML(page)
 
 	if review['publication'] == u'Chicago Reader':
 		tag = '<div class="filmShortBody" id="filmShortFull">'
 		endtag = '<span class="byline"'
 		page = page[page.find(tag) + len(tag) + 30 :]
 		page = page[: page.find(endtag) - 44]
-		return page
+		return cleanHTML(page)
 
 	if review['publication'] == u'Variety':
 		tag = '<!-- Start Article Post Content -->'
 		endtag = '\n<div'
 		page = page[page.find(tag) + len(tag) + 50 :]
 		page = page[: page.find(endtag)]
-		return page
+		return cleanHTML(page)
 	
 	print review
 	return "Not handled: " + review['publication']
+
+def cleanHTML(text):
+	old_text = ''
+	while text != old_text:
+		old_text = text
+		text = re.sub('<[^<]+?>', '', text)
+	parser = HTMLParser()
+	return parser.unescape(text)
 
 if __name__ == '__main__':
     movies = searchMovies("The Room")
