@@ -37,3 +37,6 @@ nosetests.xml
 
 # ignore file with api key
 config.py
+
+# vim swap files
+*.swp
