@@ -21,34 +21,35 @@ from random import choice
 def weightedListofKeys(corpus):
     out = []
     for key in corpus:
-        for i in range(corpus[key]['weight']):
-            out.append(key)
+        for k in corpus[key]:
+            for i in range(corpus[key][k]):
+                out.append(key)
     return out
 
 
-# I should be shot for writing this code
-def generateCorpus(sentence):
-    words = sentence.split(' ')
-    d = {}
-    for i in range(len(words)):
-        word = words[i]
-        if word in d:
-            d[word]['weight'] += 1
-        else:
-            d[word] = {'weight':1}
-        if len(words)-1 > i:
-            nextword = words[i+1]
-            if nextword in d[word]:
-                d[word][nextword]['weight']+=1
-            else:
-                d[word][nextword] = {'weight':1}
-            if len(words)-2 > i:
-                nextnextword = words[i+2]
-                if nextnextword in d[word][nextword]:
-                    d[word][nextword][nextnextword]['weight'] += 1
-                else:
-                    d[word][nextword][nextnextword] = {'weight':1}
-    print d
+from collections import defaultdict
+from re import sub, UNICODE
+
+# credit to Earwig for this (I got his permission to use it)
+# https://github.com/earwig/earwigbot/blob/develop/earwigbot/wiki/copyvios/markov.py
+def generateCorpus(text):
+    """Implements a basic ngram Markov chain of words."""
+    START = -1
+    END = -2
+    degree = 3  # 2 for bigrams, 3 for trigrams, etc.
+    chain = defaultdict(lambda: defaultdict(lambda: 0))
+    words = sub("[^\w\s-]", "", text.lower(), flags=UNICODE).split()
+    padding = degree - 1
+    words = ([START] * padding) + words + ([END] * padding)
+    for i in range(len(words) - degree + 1):
+        last = i + degree - 1
+        chain[tuple(words[i:last])][words[last]] += 1
+    return chain
 
 
-generateCorpus("the quick brown fox jumps over the lazy dog")
+corpus = generateCorpus("the quick the quick the quick the quick the quick")
+for key in corpus:
+    print key,':',corpus[key]
+
+print "---"
+print weightedListofKeys(corpus)
