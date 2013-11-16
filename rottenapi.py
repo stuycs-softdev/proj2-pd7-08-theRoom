@@ -16,6 +16,17 @@ def searchMovies(search_str):
     out = json.loads(results.read())
     return out['movies']
 
+# get movie info for a movie id
+def movieInfo(movieID):
+    results = urllib2.urlopen(getURL("movies/%s.json?"%movieID))
+    out = json.loads(results.read())
+    return out
 
 if __name__ == '__main__':
-    print searchMovies("The Room")
+    movies = searchMovies("The Room")
+    print "Movies:",movies
+    movieID = movies[0]['id']
+    print "MovieID:",movieID
+    movieInfo = movieInfo(movieID)
+    print "MovieInfo:",movieInfo
+
