@@ -30,7 +30,7 @@ def generateCorpus(text):
     """Implements a basic ngram Markov chain of words."""
     degree = 3  # 2 for bigrams, 3 for trigrams, etc.
     chain = defaultdict(lambda: defaultdict(lambda: 0))
-    words = sub("[^\w\s-]", "", text.lower(), flags=UNICODE).split()
+    words = sub("", "", text.lower(), flags=UNICODE).split()
     padding = degree - 1
     words = ([START] * padding) + words + ([END] * padding)
     for i in range(len(words) - degree + 1):
@@ -48,6 +48,6 @@ def generateSentence(corpus):
     return sentence
 
 
-corpus = generateCorpus("the quick brown fox jumps over the lazy dog really quickly because he is a quick brown fox jumping over the lazy dog")
+corpus = generateCorpus("the quick brown fox jumps over the lazy dog really quickly because he is a quick brown fox jumping over the lazy dog.")
 
 print generateSentence(corpus)
