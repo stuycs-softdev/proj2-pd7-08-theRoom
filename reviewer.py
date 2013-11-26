@@ -47,7 +47,13 @@ def generateSentence(corpus):
         pick = (pick[1], choice(weightedListofKeys(corpus[pick])))
     return sentence
 
+def generateSentenceWithGrammar(corpus):
+    max_len = 20
+    sentence = generateSentence(corpus)
+    while len(sentence.split(' ')) > max_len:
+        sentence = generateSentence(corpus)
+    return sentence
 
 corpus = generateCorpus("the quick brown fox jumps over the lazy dog really quickly because he is a quick brown fox jumping over the lazy dog.")
 
-print generateSentence(corpus)
+print generateSentenceWithGrammar(corpus)
