@@ -24,6 +24,11 @@ def search(search_request=None):
 
 	return render_template('search.html', d=d)
 
+@app.route('/movie/<movie_name>')
+def movie():
+	d['movie_name'] = movie_name
+	return render_template('movie.html', d=d)
+
 if __name__ == '__main__':
 	app.debug = True
 	app.run(host='0.0.0.0', port=5000)

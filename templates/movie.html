@@ -1,0 +1,11 @@
+<h3> This is the page for the review </h3>
+
+{% include "lib.html" %}
+
+<h3> {{ d['movie_name']}} </h3>
+
+{% for review in d['reviews']['reviews'] %}
+{% if review['publication']==d['movie_name']%}
+<p>{{ review['quote'] }}</p>
+{% endif %}
+{% endfor %}

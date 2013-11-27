@@ -5,6 +5,8 @@
 {{ d['search_request'] }}<br>
 
 {% for review in d['reviews']['reviews'] %}
-  <h3>{{ review['publication'] }}</h3>
-  <p>{{ review['quote'] }}</p>
+<a href="/movie/{{review['publication']}}">
+  {{review['publication']}}
+</a><br>
+
 {% endfor %}
