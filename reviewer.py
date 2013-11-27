@@ -2,21 +2,6 @@ from random import choice
 # our magical, automated reviewer
 
 
-# corpuses
-#{
-    #'first': {
-        #'weight1':thing,
-        #'weight2':thing, 
-        #'second': {
-            #'weight1':thing,
-            #'third': {
-                #bunch of weights
-                #}
-            #}
-        #}
-#}
-
-
 def weightedListofKeys(corpus):
     out = []
     for key in corpus:
