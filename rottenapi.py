@@ -13,11 +13,12 @@ def getURL(apinode):
     url = apiroot + apinode + "&apikey=%s"%config.apikey
     return url
 
-# get a list of movies for the search_str
-def searchMovies(search_str):
-    results = urllib2.urlopen(getURL("movies.json?q=%s&page_limit=%d&page=%d"%(quote_plus(search_str),10,1)))
-    out = json.loads(results.read())
-    return out['movies']
+# get a list of movies for the query
+def searchMovies(query):
+	request = getURL("movies.json?q=%s"%cleanQuery(query))
+	results = urllib2.urlopen(request)
+	out = json.loads(results.read())
+	return out
 
 # get movie info for a movie id
 def movieInfo(movieID):
@@ -44,16 +45,9 @@ def similarMovies(movieID):
     return out
 
 def reviewsByName(movie_name):
-	movies = searchMovies(movie_name)
+	movies = searchMovies(movie_name)['movies']
 	movieID = movies[0]['id']
 	return reviews(movieID)
-
-def searchMovies(query):
-	request = getURL("movies.json?q=%s"%cleanQuery(query))
-	print request
-	results = urllib2.urlopen(request)
-	out = json.loads(results.read())
-	return out
 
 def cleanQuery(query):
 	print query.replace(' ', '%20')

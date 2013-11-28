@@ -27,7 +27,9 @@ def search(search_request=None):
 
 @app.route('/movie/<movie_name>')
 def movie(movie_name):
-	d['movie_name'] = movie_name
+	d = {'movie_name': movie_name}
+	d['reviews'] = rottenapi.reviewsByName(movie_name)
+
 	return render_template('movie.html', d=d)
 
 if __name__ == '__main__':
