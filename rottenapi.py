@@ -35,7 +35,7 @@ def castInfo(movieID):
 def reviews(movieID):
     results = urllib2.urlopen(getURL("movies/%s/reviews.json?review_type=top_critic"%movieID))
     out = json.loads(results.read())
-    return out
+    return out['reviews']
 
 # get similar movies for a movie id
 def similarMovies(movieID):
@@ -47,6 +47,17 @@ def reviewsByName(movie_name):
 	movies = searchMovies(movie_name)
 	movieID = movies[0]['id']
 	return reviews(movieID)
+
+def searchMovies(query):
+	request = getURL("movies.json?q=%s"%cleanQuery(query))
+	print request
+	results = urllib2.urlopen(request)
+	out = json.loads(results.read())
+	return out
+
+def cleanQuery(query):
+	print query.replace(' ', '%20')
+	return query.replace(' ', '%20')
 
 def reviewText(review):
 	try:

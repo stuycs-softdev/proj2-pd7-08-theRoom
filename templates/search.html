@@ -2,11 +2,15 @@
 
 {% include "lib.html" %}
 
-{{ d['search_request'] }}<br>
+<form method='POST'>
+	<input type='text' placeholder='Movie...' name='search-request'
+	       value='{{ d['search_request'] }}' />
+	<input type='submit' value='Search' />
+</form>
 
-{% for review in d['reviews']['reviews'] %}
-<a href="/movie/{{review['publication']}}">
-  {{review['publication']}}
-</a><br>
-
+{% for movie in d['movies']['movies'] %}
+	{{ movie }} <br> <br>
+	<a href="/movie/{{ d['clean'](movie['title']) }}">
+		{{ movie['title'] }}
+	</a><br>
 {% endfor %}

@@ -19,13 +19,14 @@ def search(search_request=None):
 		return redirect('home')
 
 	d = {'search_request': search_request}
-	reviews = rottenapi.reviewsByName(search_request)
-	d['reviews'] = reviews
+	movies = rottenapi.searchMovies(search_request)
+	d['movies'] = movies
+	d['clean'] = rottenapi.cleanQuery
 
 	return render_template('search.html', d=d)
 
 @app.route('/movie/<movie_name>')
-def movie():
+def movie(movie_name):
 	d['movie_name'] = movie_name
 	return render_template('movie.html', d=d)
 
