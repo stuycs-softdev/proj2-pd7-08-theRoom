@@ -55,7 +55,8 @@ def generateSentenceWithGrammar(corpus):
         sentence = generateSentence(corpus)
     return sentence
 
-corpus = generateCorpus("the quick brown fox jumps over the lazy dog really quickly because he is a quick brown fox jumping over the lazy dog.")
-corpus = generateCorpus("another quick fox jumped over lazy cats.", corpus)
+corpus = None
+for sentence in open('quorum4').read().split('. '):
+	corpus = generateCorpus(sentence + '.', corpus)
 
 print generateSentenceWithGrammar(corpus)
