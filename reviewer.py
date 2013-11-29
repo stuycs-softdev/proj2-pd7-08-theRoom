@@ -29,6 +29,11 @@ END = -2
 def generateCorpus(text, corpus=None):
     """Implements a basic ngram Markov chain of words."""
     degree = 3  # 2 for bigrams, 3 for trigrams, etc.
+    sentences = text.split(". ")
+    if (len(sentences) > 1):
+        for sentence in sentences:
+            corpus = generateCorpus(sentence, corpus)
+        return corpus
     # use the given corpus, else use a blank new one.
     chain = defaultdict(lambda: defaultdict(lambda: 0)) if corpus == None else corpus
     words = sub("", "", text.lower(), flags=UNICODE).split()
