@@ -26,10 +26,11 @@ START = -1
 END = -2
 # credit to Earwig for this (I got his permission to use it)
 # https://github.com/earwig/earwigbot/blob/develop/earwigbot/wiki/copyvios/markov.py
-def generateCorpus(text):
+def generateCorpus(text, corpus=None):
     """Implements a basic ngram Markov chain of words."""
     degree = 3  # 2 for bigrams, 3 for trigrams, etc.
-    chain = defaultdict(lambda: defaultdict(lambda: 0))
+    # use the given corpus, else use a blank new one.
+    chain = defaultdict(lambda: defaultdict(lambda: 0)) if corpus == None else corpus
     words = sub("", "", text.lower(), flags=UNICODE).split()
     padding = degree - 1
     words = ([START] * padding) + words + ([END] * padding)
@@ -55,5 +56,6 @@ def generateSentenceWithGrammar(corpus):
     return sentence
 
 corpus = generateCorpus("the quick brown fox jumps over the lazy dog really quickly because he is a quick brown fox jumping over the lazy dog.")
+corpus = generateCorpus("another quick fox jumped over lazy cats.", corpus)
 
 print generateSentenceWithGrammar(corpus)
