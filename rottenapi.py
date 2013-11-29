@@ -50,7 +50,6 @@ def reviewsByName(movie_name):
 	return reviews(movieID)
 
 def cleanQuery(query):
-	print query.replace(' ', '%20')
 	return query.replace(' ', '%20')
 
 def reviewText(review):
@@ -109,7 +108,6 @@ def reviewText(review):
 		page = page[: page.find(endtag) - 10]
 		return stripWhitespace(cleanHTML(page))
 	
-	print review
 	return "Not handled: " + review['publication']
 
 def cleanHTML(text):

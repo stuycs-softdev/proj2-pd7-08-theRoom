@@ -3,14 +3,13 @@
 {% include "lib.html" %}
 
 <form method='POST'>
-	<input type='text' placeholder='Movie...' name='search-request'
+	<input type='text' placeholder='Movie...' name='search_request'
 	       value='{{ d['search_request'] }}' />
 	<input type='submit' value='Search' />
 </form>
 
 {% for movie in d['movies']['movies'] %}
-	{{ movie }} <br> <br>
 	<a href="/movie/{{ d['clean'](movie['title']) }}">
-		{{ movie['title'] }}
-	</a><br>
+		<image src='{{ movie["posters"]["detailed"] }}' />
+	</a>
 {% endfor %}

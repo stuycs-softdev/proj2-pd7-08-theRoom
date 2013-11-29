@@ -10,13 +10,16 @@ def home():
 		return render_template('home.html')
 
 	#POST, i.e. search
-	search_request = request.form['search-request']
+	search_request = request.form['search_request']
 	return redirect(url_for('search', search_request=search_request))
 
-@app.route('/search/<search_request>')
+@app.route('/search/<search_request>', methods=['GET', 'POST'])
 def search(search_request=None):
 	if not search_request:
 		return redirect('home')
+
+	if request.method == 'POST':
+		search_request = request.form['search_request']
 
 	d = {'search_request': search_request}
 	movies = rottenapi.searchMovies(search_request)
