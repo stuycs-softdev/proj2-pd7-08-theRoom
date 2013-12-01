@@ -28,6 +28,8 @@ class Author:
 	insertInto = "INSERT INTO %s(%s) VALUES(%s)";
 	dropTable = "DROP TABLE %s"
 	increment = "UPDATE %s SET %s = %s + %s WHERE %s = %s"
+	def __init__(self):
+		self.getDB()
 	def getDB(self):
 		if self.db == None:
 			self.db = sqlite3.connect(self.DATABASE)
@@ -46,11 +48,11 @@ class Author:
 		self.sid = data[0]
 		self.table = self.TABLE_PAIRS
 		return data
-	def reset(self,db):
-		self.dropTable("*",db)
+	def reset(self):
+		self.dropTable("*")
 		return self
-	def dropTable(self,table,db):
-		db.execute(self.dropTable%table)
+	def dropTable(self,table):
+		self.db.execute(self.dropTable%table)
 		return self
 	def initPairs(self,name,db):
 		db.execute(self.createTable%(name,self.SCHEMA_PAIRS))
