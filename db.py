@@ -1,5 +1,9 @@
 import sqlite3
 class Author:
+
+	sid = None
+	db = None
+	
 	DATABASE = "author.db"
 	TABLE_PAIRS = "pairs"
 	TABLE_CHOICES = "choices"
@@ -23,10 +27,12 @@ class Author:
 	createTable = "CREATE TABLE %s(%s);"
 	insertInto = "INSERT INTO %s(%s) VALUES(%s)";
 	dropTable = "DROP TABLE %s"
+	increment = "UPDATE %s SET %s = %s + %s WHERE %s = %s"
 	def getDB(self):
-		if self == None:
-			pass
-		return sqlite3.connect(DATABASE)
+		if self.db == None:
+			return sqlite3.connect(DATABASE)
+		else:
+			return 
 	def reset(self,db):
 		self.dropTable("*",db)
 	def dropTable(self,table,db):
@@ -38,12 +44,12 @@ class Author:
 		db.execute(self.createTable%(name,self.SCHEMA_CHOICES))
 		return db
 	def init(self):
-		db = getDB()
+		db = self.getDB()
 		self.initPairs(TABLE_PAIRS,db)
 		self.initChoices(TABLE_CHOICES,db)
 		return db
 	def increment(self,val,key):
-		pass
+		self.db.execute(self.increment
 if __name__ == "__main__":
 	a = Author()
 	print a.getDB()
