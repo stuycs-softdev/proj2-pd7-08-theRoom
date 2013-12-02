@@ -1,15 +1,17 @@
-<h3> Yay you're searching! wheeee </h3>
-
-{% include "lib.html" %}
-
-<form method='POST'>
-	<input type='text' placeholder='Movie...' name='search_request'
-	       value='{{ d['search_request'] }}' />
-	<input type='submit' value='Search' />
-</form>
-
-{% for movie in d['movies']['movies'] %}
-	<a href="/movie/{{ d['clean'](movie['title']) }}">
-		<image src='{{ movie["posters"]["detailed"] }}' />
-	</a>
-{% endfor %}
+<div class='container well'>
+  <h3> Yay you're searching! wheeee </h3>
+  
+  {% include "lib.html" %}
+  
+  <form method='POST'>
+  	<input type='text' placeholder='Movie...' name='search_request'
+  	       value='{{ d['search_request'] }}' />
+  	<input type='submit' value='Search' class='btn btn-primary' />
+  </form>
+  
+  {% for movie in d['movies']['movies'] %}
+    <a href="/movie/{{ d['clean'](movie['title']) }}">
+  	  <image src='{{ movie["posters"]["detailed"] }}' />
+    </a>
+  {% endfor %}
+</div>
