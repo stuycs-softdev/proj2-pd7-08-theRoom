@@ -16,7 +16,8 @@ def home():
 @app.route('/search/<search_request>', methods=['GET', 'POST'])
 def search(search_request=None):
 	if not search_request:
-		return redirect('home')
+		#return redirect('home')
+		return "asdf"
 
 	if request.method == 'POST':
 		search_request = request.form['search_request']
