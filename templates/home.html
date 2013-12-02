@@ -1,10 +1,9 @@
-<div class='container well'>
-  <h3> Welcome to City 17! </h3>
-  
-  {% include "lib.html" %}
-  
-  <form method='POST'>
-  	<input type='text' placeholder='Movie...' name='search_request' />
-  	<input type='submit' value='Search' class='btn btn-primary' />
-  </form>
+{% include "lib.html" %}
+
+<div id="searchbar">
+    <form method='POST'>
+        <input type='text' placeholder='Movie...' name='search-request' />
+        <br>
+        <input type='submit' value='Search' />
+    </form>
 </div>
