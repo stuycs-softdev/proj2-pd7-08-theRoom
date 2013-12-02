@@ -36,11 +36,11 @@ class Author:
 		if self.db == None:
 			self.db = sqlite3.connect(self.DATABASE)
 		return self.db
-	def select(self,table,id):
-		self.sid = id
-		self.table = table
-		i = self.db.execute("SELECT * FROM ? WHERE pid = ?",(table,id))
-		return i.fetchone()
+	#word functions
+	def select(self,word):
+		i = self.db.execute("SELECT * FROM ? WHERE word = ?",(TABLE_PAIRS,word)
+		data = i.fetchone()
+		
 	def getWords(self):
 		i = self.db.execute("SELECT * FROM ? WHERE src = ?",(self.TABLE_CHOICES,self.sid))
 		return i.fetchall()
@@ -50,12 +50,17 @@ class Author:
 		self.sid = data[0]
 		self.table = self.TABLE_PAIRS
 		return data
+	
+	#resets db
 	def reset(self):
 		self.dropTable("*")
 		return self
+	#drops a table
 	def dropTable(self,table):
 		self.db.execute(self.dropTable%table)
 		return self
+	
+	#initializes tables
 	def initPairs(self,name,db):
 		db.execute(self.createTable,(name,self.SCHEMA_PAIRS))
 		return self
@@ -67,9 +72,15 @@ class Author:
 		self.initPairs(self.TABLE_PAIRS,db)
 		self.initChoices(self.TABLE_CHOICES,db)
 		return self
-	def add(self,val,key):
-		self.db.execute(self.increment,(table,key,key,val,"pid",sid));
+	#insertion
+	def insert(self,a,b,c):
+		
+		
+	#adjust a value
+	def adjust(self,key,val):
+		self.db.execute(self.increment,(self.table,key,key,val,"pid",self.sid));
 		return self
 if __name__ == "__main__":
 	a = Author()
-	print a.getDB()
+	a.selectWords("dog","walk")
+	a.getWords(
