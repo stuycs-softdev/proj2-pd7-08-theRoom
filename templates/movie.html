@@ -1,0 +1,10 @@
+{% include "lib.html" %}
+
+<h3> {{ d['movie_name'] }} </h3>
+
+<a href='/' class='btn btn-primary'>Search more!</a>
+
+{% for review in d['reviews'] %}
+  <h5>{{ review['publication'] }}</h5>
+  <p>{{ review['quote'] }}</p>
+{% endfor %}

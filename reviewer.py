@@ -2,21 +2,6 @@ from random import choice
 # our magical, automated reviewer
 
 
-# corpuses
-#{
-    #'first': {
-        #'weight1':thing,
-        #'weight2':thing, 
-        #'second': {
-            #'weight1':thing,
-            #'third': {
-                #bunch of weights
-                #}
-            #}
-        #}
-#}
-
-
 def weightedListofKeys(corpus):
     out = []
     for key in corpus:
@@ -41,11 +26,17 @@ START = -1
 END = -2
 # credit to Earwig for this (I got his permission to use it)
 # https://github.com/earwig/earwigbot/blob/develop/earwigbot/wiki/copyvios/markov.py
-def generateCorpus(text):
+def generateCorpus(text, corpus=None):
     """Implements a basic ngram Markov chain of words."""
     degree = 3  # 2 for bigrams, 3 for trigrams, etc.
-    chain = defaultdict(lambda: defaultdict(lambda: 0))
-    words = sub("[^\w\s-]", "", text.lower(), flags=UNICODE).split()
+    sentences = text.split(". ")
+    if (len(sentences) > 1):
+        for sentence in sentences:
+            corpus = generateCorpus(sentence, corpus)
+        return corpus
+    # use the given corpus, else use a blank new one.
+    chain = defaultdict(lambda: defaultdict(lambda: 0)) if corpus == None else corpus
+    words = sub("", "", text.lower(), flags=UNICODE).split()
     padding = degree - 1
     words = ([START] * padding) + words + ([END] * padding)
     for i in range(len(words) - degree + 1):
@@ -62,7 +53,15 @@ def generateSentence(corpus):
         pick = (pick[1], choice(weightedListofKeys(corpus[pick])))
     return sentence
 
+def generateSentenceWithGrammar(corpus):
+    max_len = 20
+    sentence = generateSentence(corpus)
+    while len(sentence.split(' ')) > max_len:
+        sentence = generateSentence(corpus)
+    return sentence
 
-corpus = generateCorpus("the quick brown fox jumps over the lazy dog really quickly because he is a quick brown fox jumping over the lazy dog")
+corpus = None
+for sentence in open('quorum4').read().split('. '):
+	corpus = generateCorpus(sentence + '.', corpus)
 
-print generateSentence(corpus)
+print generateSentenceWithGrammar(corpus)
