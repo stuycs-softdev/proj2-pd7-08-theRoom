@@ -13,11 +13,12 @@ def getURL(apinode):
     url = apiroot + apinode + "&apikey=%s"%config.apikey
     return url
 
-# get a list of movies for the search_str
-def searchMovies(search_str):
-    results = urllib2.urlopen(getURL("movies.json?q=%s&page_limit=%d&page=%d"%(quote_plus(search_str),10,1)))
-    out = json.loads(results.read())
-    return out['movies']
+# get a list of movies for the query
+def searchMovies(query):
+	request = getURL("movies.json?q=%s"%cleanQuery(query))
+	results = urllib2.urlopen(request)
+	out = json.loads(results.read())
+	return out
 
 # get movie info for a movie id
 def movieInfo(movieID):
@@ -35,7 +36,7 @@ def castInfo(movieID):
 def reviews(movieID):
     results = urllib2.urlopen(getURL("movies/%s/reviews.json?review_type=top_critic"%movieID))
     out = json.loads(results.read())
-    return out
+    return out['reviews']
 
 # get similar movies for a movie id
 def similarMovies(movieID):
@@ -44,9 +45,12 @@ def similarMovies(movieID):
     return out
 
 def reviewsByName(movie_name):
-	movies = searchMovies(movie_name)
+	movies = searchMovies(movie_name)['movies']
 	movieID = movies[0]['id']
 	return reviews(movieID)
+
+def cleanQuery(query):
+	return query.replace(' ', '%20')
 
 def reviewText(review):
 	try:
@@ -118,8 +122,6 @@ def reviewText(review):
 
 	#if review['publication'] == u'Film.com':
 	
-	
-	print review
 	return "Not handled: " + review['publication']
 
 def cleanHTML(text):

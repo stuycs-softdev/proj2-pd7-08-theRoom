@@ -1,8 +1,15 @@
 <h3> Yay you're searching! wheeee </h3>
 
-{{ d['search_request'] }}<br>
+{% include "lib.html" %}
 
-{% for review in d['reviews']['reviews'] %}
-  <h3>{{ review['publication'] }}</h3>
-  <p>{{ review['quote'] }}</p>
+<form method='POST'>
+	<input type='text' placeholder='Movie...' name='search_request'
+	       value='{{ d['search_request'] }}' />
+	<input type='submit' value='Search' />
+</form>
+
+{% for movie in d['movies']['movies'] %}
+	<a href="/movie/{{ d['clean'](movie['title']) }}">
+		<image src='{{ movie["posters"]["detailed"] }}' />
+	</a>
 {% endfor %}
