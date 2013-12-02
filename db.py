@@ -24,10 +24,10 @@ class Author:
 	style int,
 	UNIQUE(word,foreignKey)
 	"""
-	createTable = "CREATE TABLE %s(%s);"
-	insertInto = "INSERT INTO %s(%s) VALUES(%s)";
-	dropTable = "DROP TABLE %s"
-	increment = "UPDATE %s SET %s = %s + %s WHERE %s = %s"
+	createTable = "CREATE TABLE ?(?);"
+	insertInto = "INSERT INTO ?(?) VALUES(?)";
+	dropTable = "DROP TABLE ?"
+	increment = "UPDATE ? SET ? = ? + ? WHERE ? = ?"
 	def __init__(self):
 		self.getDB()
 	def getDB(self):
@@ -37,13 +37,13 @@ class Author:
 	def select(self,table,id):
 		self.sid = id
 		self.table = table
-		i = self.db.execute("SELECT * FROM %s WHERE pid = %s"%(table,id))
+		i = self.db.execute("SELECT * FROM ? WHERE pid = ?",(table,id))
 		return i.fetchone()
 	def getWords(self):
-		i = self.db.execute("SELECT * FROM %s WHERE src = %s"%(self.TABLE_CHOICES,self.sid))
+		i = self.db.execute("SELECT * FROM ? WHERE src = ?",(self.TABLE_CHOICES,self.sid))
 		return i.fetchall()
-	def selectWords(a,b):
-		i = self.db.execute("SELECT * FROM %s WHERE firstWord = %s &  secondWord = %s"%(self.TABLE_PAIRS,a,b))
+	def selectWords(self,a,b):
+		i = self.db.execute("SELECT * FROM ? WHERE firstWord = ? &  secondWord = ?",(self.TABLE_PAIRS,a,b))
 		data = i.fetchone()
 		self.sid = data[0]
 		self.table = self.TABLE_PAIRS
@@ -55,10 +55,10 @@ class Author:
 		self.db.execute(self.dropTable%table)
 		return self
 	def initPairs(self,name,db):
-		db.execute(self.createTable%(name,self.SCHEMA_PAIRS))
+		db.execute(self.createTable,(name,self.SCHEMA_PAIRS))
 		return self
 	def initChoices(self,name,db):
-		db.execute(self.createTable%(name,self.SCHEMA_CHOICES))
+		db.execute(self.createTable,(name,self.SCHEMA_CHOICES))
 		return self
 	def init(self):
 		db = self.getDB()
@@ -66,7 +66,7 @@ class Author:
 		self.initChoices(self.TABLE_CHOICES,db)
 		return self
 	def add(self,val,key):
-		self.db.execute(self.increment%(table,key,key,val,"pid",sid));
+		self.db.execute(self.increment,(table,key,key,val,"pid",sid));
 		return self
 if __name__ == "__main__":
 	a = Author()
