@@ -34,6 +34,9 @@ def search(search_request=None):
 def movie(movie_name):
 	d = {'movie_name': movie_name}
 	d['reviews'] = rottenapi.reviewsByName(movie_name)
+	d['texts'] = []
+	for review in d['reviews']:
+		d['texts'].append(rottenapi.reviewText(review))
 
 	return render_template('movie.html', d=d)
 
