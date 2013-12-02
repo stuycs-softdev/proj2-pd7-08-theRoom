@@ -1,4 +1,6 @@
 import sqlite3
+import document
+
 class Author:
 	table = None
 	sid = None
