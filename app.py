@@ -19,15 +19,18 @@ def search(search_request=None):
 		return redirect('home')
 
 	d = {'search_request': search_request}
-	reviews = rottenapi.reviewsByName(search_request)
-	d['reviews'] = reviews
+	movies = rottenapi.searchMovies(search_request)
+	d['movies'] = movies
 
 	return render_template('search.html', d=d)
 
-@app.route('/movie/<movie_name>')
-def movie():
-	d['movie_name'] = movie_name
-	return render_template('movie.html', d=d)
+@app.route('/movie/<movie_id>')
+def movie(movie_id):
+	movieInfo = rottenapi.movieInfo(movie_id)
+	castInfo = rottenapi.castInfo(movie_id)
+	reviews = rottenapi.reviews(movie_id)
+	similarMovies = rottenapi.similarMovies(movie_id)
+	return render_template('movie.html', movieInfo=movieInfo, castInfo=castInfo, reviews=reviews, similarMovies=similarMovies)
 
 if __name__ == '__main__':
 	app.debug = True

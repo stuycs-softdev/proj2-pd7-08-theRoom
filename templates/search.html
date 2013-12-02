@@ -4,9 +4,13 @@
 
 {{ d['search_request'] }}<br>
 
-{% for review in d['reviews']['reviews'] %}
-<a href="/movie/{{review['publication']}}">
-  {{review['publication']}}
-</a><br>
+{% for movie in d['movies'] %}
+
+<img src="{{movie['posters']['thumbnail']}}" >
+<a href="/movie/{{movie['id']}}">
+  {{movie['title']}}
+</a> ({{movie['year']}})<br>
+
+
 
 {% endfor %}
