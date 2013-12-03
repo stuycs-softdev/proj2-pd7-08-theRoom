@@ -1,5 +1,4 @@
-from enum import Enum
-class doc(Enum):
+class doc():
 	startd = 0
 	starts = 1
 	endd = 2
