@@ -38,7 +38,7 @@ class Author:
 		return self.db
 	#word functions
 	def select(self,word):
-		i = self.db.execute("SELECT * FROM ? WHERE word = ?",(TABLE_PAIRS,word)
+		i = self.db.execute("SELECT * FROM ? WHERE word = ?",(TABLE_PAIRS,word))
 		data = i.fetchone()
 		
 	def getWords(self):
@@ -74,7 +74,7 @@ class Author:
 		return self
 	#insertion
 	def insert(self,a,b,c):
-		
+		pass
 		
 	#adjust a value
 	def adjust(self,key,val):
@@ -83,4 +83,4 @@ class Author:
 if __name__ == "__main__":
 	a = Author()
 	a.selectWords("dog","walk")
-	a.getWords(
+	#a.getWords(
