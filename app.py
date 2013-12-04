@@ -29,7 +29,7 @@ def search(search_request=None):
 def movie(movie_id):
 	movieInfo = rottenapi.movieInfo(movie_id)
 	castInfo = rottenapi.castInfo(movie_id)
-	reviews = rottenapi.reviews(movie_id)
+	reviews = [rottenapi.reviewText(r) for r in rottenapi.reviews(movie_id)]
 
 
 	similarMovies = rottenapi.similarMovies(movie_id)
