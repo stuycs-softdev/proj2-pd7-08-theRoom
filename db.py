@@ -22,8 +22,6 @@ class Author:
 	src int foreignKey,
 	word varchar(255),
 	freq int,
-	coherency int,
-	style int,
 	UNIQUE(word,src)
 	"""
 	createTable = "CREATE TABLE %s(%s);"
@@ -34,7 +32,7 @@ class Author:
 		self.getDB()
 	def getDB(self):
 		if self.db == None:
-			self.db = sqlite3.connect(self.DATABASE)
+			self.db = sqlite3.connect(self.DATABASE).cursor()
 		return self.db
 	#word functions
 	def select(self,word,srcid = None):
@@ -82,12 +80,15 @@ class Author:
 		exists = self.selectWords(a,b)
 		if exists[0] is not None:
 			self.db.execute(self.insertInto%(TABLE_PAIRS,"firstWord,secondWord","%s,%s"%(a,b)))
+			self.sid = self.db.lastrowid
+			self.table = TABLE_PAIRS
 		exists = self.select(c)
 		if exists[0] is not None:
 			self.adjust("freq",1)
 		else:
 			self.selectWords(a,b)
-			self.db.execute(self.insertInto,TABLE_CHOICES,
+			self.db.execute(self.insertInto%(TABLE_CHOICES,"src,word,freq","%s,%s,%s"%(self.sid,c,0)))
+		return self
 	#adjust a value
 	def adjust(self,key,val):
 		self.db.execute(self.increment,(self.table,key,key,val,"pid",self.sid));
