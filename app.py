@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request, render_template, redirect, url_for
 import rottenapi
+import reviewer
 
 app = Flask(__name__)
 
@@ -29,6 +30,8 @@ def movie(movie_id):
 	movieInfo = rottenapi.movieInfo(movie_id)
 	castInfo = rottenapi.castInfo(movie_id)
 	reviews = rottenapi.reviews(movie_id)
+
+
 	similarMovies = rottenapi.similarMovies(movie_id)
 	return render_template('movie.html', movieInfo=movieInfo, castInfo=castInfo, reviews=reviews, similarMovies=similarMovies)
 
