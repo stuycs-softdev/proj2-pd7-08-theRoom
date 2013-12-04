@@ -24,7 +24,7 @@ class Author:
 	freq int,
 	coherency int,
 	style int,
-	UNIQUE(word,foreignKey)
+	UNIQUE(word,src)
 	"""
 	createTable = "CREATE TABLE ?(?);"
 	insertInto = "INSERT INTO ?(?) VALUES(?)";
@@ -37,15 +37,19 @@ class Author:
 			self.db = sqlite3.connect(self.DATABASE)
 		return self.db
 	#word functions
-	def select(self,word):
-		i = self.db.execute("SELECT * FROM ? WHERE word = ?",(TABLE_PAIRS,word))
+	def select(self,word,srcid = None):
+		if srcid is None:
+			srcid = self.sid
+		i = self.db.execute("SELECT * FROM ? WHERE word = ? AND src = ?",(TABLE_CHOICES,word,srcid))
 		data = i.fetchone()
-		
+		self.sid = data[0]
+		self.table = TABLE_CHOICES
+		return data
 	def getWords(self):
 		i = self.db.execute("SELECT * FROM ? WHERE src = ?",(self.TABLE_CHOICES,self.sid))
 		return i.fetchall()
 	def selectWords(self,a,b):
-		i = self.db.execute("SELECT * FROM ? WHERE firstWord = ? &  secondWord = ?",(self.TABLE_PAIRS,a,b))
+		i = self.db.execute("SELECT * FROM ? WHERE firstWord = ? AND secondWord = ?",(self.TABLE_PAIRS,a,b))
 		data = i.fetchone()
 		self.sid = data[0]
 		self.table = self.TABLE_PAIRS
