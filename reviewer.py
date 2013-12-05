@@ -1,4 +1,5 @@
 from random import choice
+from document import doc
 # our magical, automated reviewer
 
 
@@ -22,15 +23,21 @@ def weightedListofKeys2D(corpus):
 from collections import defaultdict
 from re import sub, UNICODE
 
-START = -1
-END = -2
+START = doc.SQLss
+END = doc.SQLes
 # credit to Earwig for this (I got his permission to use it)
 # https://github.com/earwig/earwigbot/blob/develop/earwigbot/wiki/copyvios/markov.py
-def generateCorpus(text):
+def generateCorpus(text, corpus=None):
     """Implements a basic ngram Markov chain of words."""
     degree = 3  # 2 for bigrams, 3 for trigrams, etc.
-    chain = defaultdict(lambda: defaultdict(lambda: 0))
-    words = sub("[^\w\s-]", "", text.lower(), flags=UNICODE).split()
+    sentences = text.split(". ")
+    if (len(sentences) > 1):
+        for sentence in sentences:
+            corpus = generateCorpus(sentence, corpus)
+        return corpus
+    # use the given corpus, else use a blank new one.
+    chain = defaultdict(lambda: defaultdict(lambda: 0)) if corpus == None else corpus
+    words = sub("", "", text.lower(), flags=UNICODE).split()
     padding = degree - 1
     words = ([START] * padding) + words + ([END] * padding)
     for i in range(len(words) - degree + 1):
@@ -40,18 +47,28 @@ def generateCorpus(text):
 
 
 def generateSentence(corpus):
-    pick = choice(weightedListofKeys2D(corpus))
-    sentence = str(pick[0]) + " "
+    pick = [END, END];
+    while pick[0] != START:
+        pick = choice(weightedListofKeys2D(corpus))
+    sentence = " "
     while not END in pick:
-        sentence += str(pick[1]) + " " 
+        if pick[1] != START:
+            sentence += str(pick[1]) + " " 
         pick = (pick[1], choice(weightedListofKeys(corpus[pick])))
     return sentence
 
 def generateReview(movie_id):
     return "something something ipsum"
 
-corpus = generateCorpus("the quick brown fox jumps over the lazy dog really quickly because he is a quick brown fox jumping over the lazy dog")
+def generateSentenceWithGrammar(corpus):
+    max_len = 20
+    sentence = generateSentence(corpus)
+    while len(sentence.split(' ')) > max_len:
+        sentence = generateSentence(corpus)
+    return sentence
 
-print generateSentence(corpus)
+corpus = None
+for sentence in open('quorum4').read().split('. '):
+	corpus = generateCorpus(sentence + '.', corpus)
 
-
+print generateSentenceWithGrammar(corpus)

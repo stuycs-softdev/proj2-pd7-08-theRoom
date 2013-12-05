@@ -7,6 +7,7 @@
   <h1>{{d['search_request']}}</h1>
 </div>
 
+<<<<<<< HEAD
 
 {% for movie in d['movies'] %}
 
@@ -57,7 +58,27 @@
   </div>
 </div><br>
 
+=======
+<div id="searchresults">
+{% for movie in d['movies']['movies'] %}
+		{% if movie['posters']['detailed'] != "http://images.rottentomatoescdn.com/images/redesign/poster_default.gif" %}
+	<div class="movie">
+		<a href=/movie/{{ movie['id'] }}>
+		<img class="searchresult" src=
+		{{ movie['posters']['detailed'] }}
+		></img>
+		</a>
+	</div>
+	{% endif %}
+
+{% if loop.index is divisibleby 4 %}
+<br>
+{% endif %}
+>>>>>>> master
 
 {% endfor %}
+</div>
+<br>
+<!--http://i.imgur.com/UXbU9lF.jpg-->
 
 </body>
