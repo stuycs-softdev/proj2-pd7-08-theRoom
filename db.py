@@ -5,7 +5,7 @@ class Author:
 	table = None
 	sid = None
 	db = None
-	
+	conn = None	
 	DATABASE = "author.db"
 	TABLE_PAIRS = "pairs"
 	TABLE_CHOICES = "choices"
@@ -31,8 +31,9 @@ class Author:
 	def __init__(self):
 		self.getDB()
 	def getDB(self):
-		if self.db == None:
-			self.db = sqlite3.connect(self.DATABASE).cursor()
+		if self.db is None or self.conn is None:
+			self.conn = sqlite3.connect(self.DATABASE)
+			self.db = self.conn.cursor()
 		return self.db
 	#word functions
 	def select(self,word,srcid = None):
@@ -42,7 +43,7 @@ class Author:
 		data = i.fetchone()
 		if data is not None:
 			self.sid = data[0]
-			self.table = TABLE_CHOICES
+			self.table = self.TABLE_CHOICES
 		return data
 	def getWords(self):
 		i = self.db.execute("SELECT * FROM %s WHERE src = '%s'"%(self.TABLE_CHOICES,self.sid))
@@ -80,10 +81,10 @@ class Author:
 	#insertion
 	def insert(self,a,b,c):
 		exists = self.selectWords(a,b)
-		if exists is not None:
-			self.db.execute(self.insertInto%(TABLE_PAIRS,"firstWord,secondWord","%s,%s"%(a,b)))
+		if exists is None:
+			self.db.execute(self.insertInto%(self.TABLE_PAIRS,"firstWord,secondWord","'%s','%s'"%(a,b)))
 			self.sid = self.db.lastrowid
-			self.table = TABLE_PAIRS
+			self.table = self.TABLE_PAIRS
 		exists = self.select(c)
 		if exists is not None:
 			self.adjust("freq",1)
@@ -93,8 +94,10 @@ class Author:
 		return self
 	#adjust a value
 	def adjust(self,key,val):
-		self.db.execute(self.increment,(self.table,key,key,val,"pid",self.sid));
+		self.db.execute(self.increment%(self.table,key,key,val,"pid",self.sid));
 		return self
+	def __del__(self):
+		self.conn.commit()
 if __name__ == "__main__":
 	a = Author()
 	a.reset()
