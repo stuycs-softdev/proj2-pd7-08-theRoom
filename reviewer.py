@@ -1,4 +1,5 @@
 from random import choice
+from document import doc
 # our magical, automated reviewer
 
 
@@ -22,8 +23,8 @@ def weightedListofKeys2D(corpus):
 from collections import defaultdict
 from re import sub, UNICODE
 
-START = -1
-END = -2
+START = doc.SQLss
+END = doc.SQLes
 # credit to Earwig for this (I got his permission to use it)
 # https://github.com/earwig/earwigbot/blob/develop/earwigbot/wiki/copyvios/markov.py
 def generateCorpus(text, corpus=None):
