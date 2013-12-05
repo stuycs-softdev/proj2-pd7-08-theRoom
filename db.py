@@ -1,5 +1,5 @@
 import sqlite3
-import document
+from document import doc
 
 class Author:
 	table = None
