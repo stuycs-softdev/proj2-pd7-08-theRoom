@@ -57,6 +57,9 @@ def generateSentence(corpus):
         pick = (pick[1], choice(weightedListofKeys(corpus[pick])))
     return sentence
 
+def generateReview(movie_id):
+    return "something something ipsum"
+
 def generateSentenceWithGrammar(corpus):
     max_len = 20
     sentence = generateSentence(corpus)

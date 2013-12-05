@@ -1,12 +1,22 @@
+<h4> This is the page for the review </h4>
+
 {% include "lib.html" %}
 
-<div class='container well'>
-  <h3 class='text-center'> {{ d['movie_name'] }} </h3>
-  
-  <a href='/' class='btn btn-primary'>Search more!</a>
-  
-  {% for review in d['reviews'] %}
-    <h5 class='text-center'>{{ review['publication'] }}</h5>
-    <p class='text-center'>{{ review['quote'] }}</p>
-  {% endfor %}
-</div>
+<h3>{{ movieInfo['title']}} ({{movieInfo['year']}})</h3>
+<img border="0" src="{{movieInfo['posters']['detailed']}}" alt="detailed">
+<br>
+
+<h2>Movie Info</h2>
+Genre(s): {% for genre in movieInfo['genres']%} {{genre}}, {% endfor %}<br>
+Directors: {% for director in movieInfo['abridged_directors'] %} {{director['name']}}, {% endfor %}
+<br>
+Cast: {% for actor in movieInfo['abridged_cast'] %} {{actor['name']}}, {% endfor %} <a href="{{movieInfo['links']['cast']}}">full cast</a>
+<br>
+
+
+
+<br>
+{% for r in reviews %}
+  {{ text }}
+{% endfor %}
+<img border="0" src="http://i.imgur.com/cyO0KTQ.jpg">

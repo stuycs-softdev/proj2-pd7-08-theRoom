@@ -1,17 +1,31 @@
-<div class='container well'>
-  <h3> Yay you're searching! wheeee </h3>
-  
-  {% include "lib.html" %}
-  
-  <form method='POST'>
-  	<input type='text' placeholder='Movie...' name='search_request'
-  	       value='{{ d['search_request'] }}' />
-  	<input type='submit' value='Search' class='btn btn-primary' />
-  </form>
-  
-  {% for movie in d['movies']['movies'] %}
-    <a href="/movie/{{ d['clean'](movie['title']) }}">
-  	  <image src='{{ movie["posters"]["detailed"] }}' />
-    </a>
-  {% endfor %}
+{% include "lib.html" %}
+
+<h3> Yay you're searching for... </h3>
+
+
+<div class="jumbotron">
+  <h1>{{d['search_request']}}</h1>
 </div>
+
+<div id="searchresults">
+{% for movie in d['movies']['movies'] %}
+		{% if movie['posters']['detailed'] != "http://images.rottentomatoescdn.com/images/redesign/poster_default.gif" %}
+	<div class="movie">
+		<a href=/movie/{{ movie['id'] }}>
+		<img class="searchresult" src=
+		{{ movie['posters']['detailed'] }}
+		></img>
+		</a>
+	</div>
+	{% endif %}
+
+{% if loop.index is divisibleby 4 %}
+<br>
+{% endif %}
+
+{% endfor %}
+</div>
+<br>
+<!--http://i.imgur.com/UXbU9lF.jpg-->
+
+</body>
