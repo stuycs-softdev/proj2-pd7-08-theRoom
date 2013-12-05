@@ -57,9 +57,9 @@ def reviewText(review):
 		link = review['links']['review'].replace(" ","%20")
 		page = urllib2.urlopen(link).read()
 	except urllib2.HTTPError:
-		return "404: " + review['publication']
+		return None
 	except KeyError:
-		return "No reviews found"
+		return None
 
 	if review['publication'] == u'Village Voice':
 		page = page[page.find("<div class='content_body'"):]
@@ -101,8 +101,8 @@ def reviewText(review):
 		page = page[: page.find(endtag)]
 		return stripWhitespace(cleanHTML(page))
 	
-	if review['publication'] == u'Passionate Moviegoer':
-		return "Not handled on purpose: multiple reviews on same page."
+	#if review['publication'] == u'Passionate Moviegoer':
+	#	return "Not handled on purpose: multiple reviews on same page."
 	
 	if review['publication'] == u'Time Out':
 		tag = '<p class="date">'
@@ -111,21 +111,21 @@ def reviewText(review):
 		page = page[: page.find(endtag) - 10]
 		return stripWhitespace(cleanHTML(page))
 	
-	if review['publication'] == u'Newsday':
-		return "Not handled on purpose: no solid tag."
+	#if review['publication'] == u'Newsday':
+	#	return "Not handled on purpose: no solid tag."
 
-	if review['publication'] == u'Richard Roeper.com':
-		return "Not handled on purpose: video reviews."
+	#if review['publication'] == u'Richard Roeper.com':
+	#	return "Not handled on purpose: video reviews."
 	
-	if review['publication'] == u'Wall Street Journal':
-		return "Not handled on purpose: no solid tag."
+	#if review['publication'] == u'Wall Street Journal':
+	#	return "Not handled on purpose: no solid tag."
 
-	if review['publication'] == u'San Francisco Chronicle':
-		return "Not handled on purpose: redirect."
+	#if review['publication'] == u'San Francisco Chronicle':
+	#	return "Not handled on purpose: redirect."
 
 	#if review['publication'] == u'Film.com':
 	
-	return "Not handled: " + review['publication']
+	return None
 
 def cleanHTML(text):
 	old_text = ''
