@@ -46,6 +46,13 @@ class Author:
 			self.sid = data[0]
 			self.table = self.TABLE_CHOICES
 		return data
+	def getCorpus(self,pick):
+		self.selectWords(pick[0],pick[1])
+		data = self.getWords()
+		ans = {}
+		for i in data:
+			ans[i[2]] = i[3]
+		return ans
 	def getWords(self,pid = None):
 		if pid is None:
 			pid = self.sid
@@ -59,7 +66,7 @@ class Author:
 			self.table = self.TABLE_PAIRS
 		return data
 	def getPairs(self,a):
-		i = self.db.execute("SELECT firstWord,secondWord FROM %s WHERE firstWord = ? "%(self.TABLE_PAIRS),(a,b))
+		i = self.db.execute("SELECT firstWord,secondWord FROM %s WHERE firstWord = ? "%(self.TABLE_PAIRS),(a,))
 		data = i.fetchall()
 		return data
 		

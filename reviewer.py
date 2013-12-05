@@ -46,29 +46,28 @@ def generateCorpus(text, corpus=None):
     return chain
 
 
-def generateSentence(corpus):
+def generateSentence(corpus,getNext):
     pick = [END, END];
     while pick[0] != START:
-        pick = choice(weightedListofKeys2D(corpus))
+        pick = choice(corpus)
     sentence = " "
     while not END in pick:
         if pick[1] != START:
             sentence += str(pick[1]) + " " 
-        pick = (pick[1], choice(weightedListofKeys(corpus[pick])))
+        pick = (pick[1], choice(weightedListofKeys(getNext(pick))))
     return sentence
 
 def generateReview(movie_id):
     return "something something ipsum"
 
-def generateSentenceWithGrammar(corpus):
+def generateSentenceWithGrammar(corpus,getNext):
     max_len = 20
     sentence = generateSentence(corpus)
     while len(sentence.split(' ')) > max_len:
-        sentence = generateSentence(corpus)
+        sentence = generateSentence(corpus,getNext)
     return sentence
 
 corpus = None
 for sentence in open('quorum4').read().split('. '):
 	corpus = generateCorpus(sentence + '.', corpus)
 
-print generateSentenceWithGrammar(corpus)

@@ -58,7 +58,7 @@ def movie(movie_name):
 	i = 0
 	while i < REVIEW_LENGTH:
 		print "writing"
-		d['review'] += " " + reviewer.generateSentenceWithGrammar(a.everything()) + "."
+		d['review'] += " " + reviewer.generateSentenceWithGrammar(a.getPairs(doc.SQLss),a.getCorpus) + "."
 		i += 1
 	return render_template('movie.html', movieInfo=d)
 
