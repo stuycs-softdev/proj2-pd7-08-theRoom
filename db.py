@@ -39,7 +39,8 @@ class Author:
 	def select(self,word,srcid = None):
 		if srcid is None:
 			srcid = self.sid
-		i = self.db.execute("SELECT * FROM %s WHERE word = '%s' AND src = '%s'"%(self.TABLE_CHOICES,word,srcid))
+		sql = "SELECT * FROM %s WHERE word = ? AND src = ?"%self.TABLE_CHOICES
+		i = self.db.execute(sql,(word,srcid))
 		data = i.fetchone()
 		if data is not None:
 			self.sid = data[0]
@@ -48,10 +49,10 @@ class Author:
 	def getWords(self,pid = None):
 		if pid is None:
 			pid = self.sid
-		i = self.db.execute("SELECT * FROM %s WHERE src = '%s'"%(self.TABLE_CHOICES,pid))
+		i = self.db.execute("SELECT * FROM %s WHERE src = %s"%(self.TABLE_CHOICES,pid))
 		return i.fetchall()
 	def selectWords(self,a,b):
-		i = self.db.execute("SELECT * FROM %s WHERE firstWord = '%s' AND secondWord = '%s'"%(self.TABLE_PAIRS,a,b))
+		i = self.db.execute("SELECT * FROM %s WHERE firstWord = ? AND secondWord = ?"%(self.TABLE_PAIRS),(a,b))
 		data = i.fetchone()
 		if data is not None:
 			self.sid = data[0]
@@ -84,7 +85,7 @@ class Author:
 	def insert(self,a,b,c):
 		exists = self.selectWords(a,b)
 		if exists is None:
-			self.db.execute(self.insertInto%(self.TABLE_PAIRS,"firstWord,secondWord","'%s','%s'"%(a,b)))
+			self.db.execute(self.insertInto%(self.TABLE_PAIRS,"firstWord,secondWord","?,?"),(a,b))
 			self.sid = self.db.lastrowid
 			self.table = self.TABLE_PAIRS
 		exists = self.select(c)
@@ -92,7 +93,7 @@ class Author:
 			self.adjust("freq",1)
 		else:
 			self.selectWords(a,b)
-			self.db.execute(self.insertInto%(self.TABLE_CHOICES,"src,word,freq","'%s','%s','%s'"%(self.sid,c,1)))
+			self.db.execute(self.insertInto%(self.TABLE_CHOICES,"src,word,freq","?,?,?"),(self.sid,c,1))
 		return self
 	#everything
 	def everything(self):
@@ -114,8 +115,13 @@ class Author:
 	def adjust(self,key,val):
 		self.db.execute(self.increment%(self.table,key,key,val,"pid",self.sid));
 		return self
-	def __del__(self):
+	#save
+	def save(self):
 		self.conn.commit()
+	def __del__(self):
+		self.save()
+		self.db = None
+		sekf.conn = None
 if __name__ == "__main__":
 	a = Author()
 	a.reset()

@@ -5,6 +5,7 @@ import db
 import rottenapi
 import reviewer
 app = Flask(__name__)
+REVIEW_LENGTH = 20 #sentences
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -34,6 +35,7 @@ def search(search_request=None):
 
 @app.route('/movie/<movie_name>')
 def movie(movie_name):
+	
 	a = db.Author()
 	d = {'movie_name': movie_name}
 	
@@ -41,20 +43,46 @@ def movie(movie_name):
 	d['texts'] = []
 	d['info'] = rottenapi.movieInfo(d['movie_name'])
 	for review in d['reviews']:
+		print "trying to read here"
 		d['texts'].append(rottenapi.reviewText(review))
+	print "Done reading"
 	for text in d['texts']:
-		text.replace(". "," %s %s "%(doc.SQLes,doc.SQLss))
-		text.replace("! "," %s %s "%(doc.SQLes,doc.SQLss))
-		text.replace("? "," %s %s "%(doc.SQLes,doc.SQLss))
-		data = text.split(" ")
-		data.insert(0,doc.SQLss)
-		data.append(doc.SQLes)
-		i = 0
-		while i < len(data) - 3:
-			a.insert(data[i],data[i+1],data[i+2])
-	d['review'] = reviewer.generateSentenceWithGrammar(a.everything())
+		saveText(text,a)
+	
+	d['review'] = ""
+	
+	i = 0
+	while i < REVIEW_LENGTH:
+		
+		d['review'] += " " + reviewer.generateSentenceWithGrammar(a.everything())
+		i += 1
 	return render_template('movie.html', movieInfo=d)
 
+@app.route('/debug/')
+def debug():
+	a = db.Author()
+	a.reset()
+	a.init()
+	saveText("The quick Brown Fox jumped. Fire baby, fire.",a)
+	saveText("When i ran to the quick supermarket I saw an explosive donkey making honking noises at my family whowere on fire because the Brown Fox had shot them.",a)
+	return reviewer.generateSentenceWithGrammar(a.everything())
+
+def saveText(text,a):
+	text = text.replace(". "," %s %s "%(doc.SQLes,doc.SQLss))
+	text = text.replace("! "," %s %s "%(doc.SQLes,doc.SQLss))
+	text = text.replace("? "," %s %s "%(doc.SQLes,doc.SQLss))
+	data = text.split(" ")
+	data.insert(0,doc.SQLss)
+	data.append(doc.SQLes)
+	i = 0
+	print "not looping yet..."
+	while i < len(data) - 3:
+		print "LOOOOOOOOOOOOOOOOOOOOP"
+		a.insert(data[i],data[i+1],data[i+2])
+		i+= 1
+	a.insert(data[i],data[i+1],doc.SQLes)
+	a.insert(data[i+1],doc.SQLes,doc.SQLes)
+	a.save()
 if __name__ == '__main__':
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
