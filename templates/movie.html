@@ -2,21 +2,52 @@
 
 {% include "lib.html" %}
 
-<h3>{{ movieInfo['info']['title']}} ({{movieInfo['info']['year']}})</h3>
-<img border="0" src="{{movieInfo['info']['posters']['detailed']}}" alt="detailed">
-<br>
+<div class="jumbotron">
+  <h3>{{ movieInfo['title']}} ({{movieInfo['year']}})</h3>
+</div>
 
-<h2>Movie Info</h2>
-Genre(s): {% for genre in movieInfo['info']['genres']%} {{genre}}, {% endfor %}<br>
-Directors: {% for director in movieInfo['info']['abridged_directors'] %} {{director['name']}}, {% endfor %}
-<br>
-Cast: {% for actor in movieInfo['info']['abridged_cast'] %} {{actor['name']}}, {% endfor %} <a href="{{movieInfo['info']['links']['cast']}}">full cast</a>
-<br>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="jumbotron">
+      {{movieInfo['title']}
+      </div>
+    {% if movie['year'] != "" %}
+    ({{movie['year']}})
+    {% endif %}
+  </div>
+  <div class="panel-body">
 
 
+<div class="media">
+  <a class="pull-left" href="#">
+    <img class="media-object" src="{{movieInfo['posters']['original']}}" height="810" width="540">
+  </a>
+  <div class="media-body">
 
-<br>
-{{movieInfo['review']}}
-{% for text in movieInfo['reviews'] %}
-{% endfor %}
-<img border="0" src="http://i.imgur.com/cyO0KTQ.jpg">
+    <h2>Movie Info</h2>
+    Genre(s): {% for genre in movieInfo['genres']%} {{genre}}, {% endfor %}<br>
+    Directors: {% for director in movieInfo['abridged_directors'] %} {{director['name']}}, {% endfor %}
+    <br>
+    MPAA Rating: {{movieInfo['rating']}}<br>
+
+
+    <!-- put text description, actors, etc here -->
+    {% for castmem in movie['abridged_cast'] %}
+    {{castmem['name']}}
+
+    {% if castmem['characters'] is defined %}
+    as 
+    {% for name in castmem['characters'] %}
+    {{name}}, 
+    {% endfor %}
+    ;
+    {% endif %}
+    {% endfor %}
+    <br>
+    <!--insert review(s) here-->
+  </div>
+</div>
+
+  </div>
+</div>
+
