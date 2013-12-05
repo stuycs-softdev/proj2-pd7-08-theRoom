@@ -9,15 +9,15 @@
 
 <div id="searchresults">
 {% for movie in d['movies']['movies'] %}
+		{% if movie['posters']['detailed'] != "http://images.rottentomatoescdn.com/images/redesign/poster_default.gif" %}
 	<div class="movie">
 		<a href=/movie/{{ movie['id'] }}>
-		{% if movie['posters']['detailed'] != "http://images.rottentomatoescdn.com/images/redesign/poster_default.gif" %}
 		<img class="searchresult" src=
 		{{ movie['posters']['detailed'] }}
 		></img>
 		</a>
 	</div>
-{% endif %}
+	{% endif %}
 
 {% if loop.index is divisibleby 4 %}
 <br>
