@@ -19,4 +19,29 @@
       padding-top: 25%;
       width: 15em;
   }
+
+  .searchresult {
+      width: 22%;
+      margin-left: .5%;
+      margin-right: .5%;
+      height: auto;
+      animation-duration: 10s;
+      animation-name: grow;
+  }
+
+  .searchresult:hover {
+      margin-left: 0%;
+      margin-right: 0%;
+      width: 23%;
+  }
+
+  @keyframes grow {
+      from {
+        width: 10;
+      }
+
+      to {
+        width: 20;
+      }
+  }
 </style>

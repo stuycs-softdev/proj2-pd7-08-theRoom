@@ -25,6 +25,7 @@ def search(search_request=None):
     d = {'search_request': search_request}
     movies = rottenapi.searchMovies(search_request)
     d['movies'] = movies
+    print d
 
     return render_template('search.html', d=d)
 
