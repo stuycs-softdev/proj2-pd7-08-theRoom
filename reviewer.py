@@ -47,10 +47,14 @@ def generateCorpus(text, corpus=None):
 
 
 def generateSentence(corpus):
-    pick = choice(weightedListofKeys2D(corpus))
-    sentence = str(pick[0]) + " "
+    pick = [END, END];
+    while pick[0] != START:
+        pick = choice(weightedListofKeys2D(corpus))
+    print pick
+    sentence = " "
     while not END in pick:
-        sentence += str(pick[1]) + " " 
+        if pick[1] != START:
+            sentence += str(pick[1]) + " " 
         pick = (pick[1], choice(weightedListofKeys(corpus[pick])))
     return sentence
 
