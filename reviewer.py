@@ -50,7 +50,6 @@ def generateSentence(corpus):
     pick = [END, END];
     while pick[0] != START:
         pick = choice(weightedListofKeys2D(corpus))
-    print pick
     sentence = " "
     while not END in pick:
         if pick[1] != START:
