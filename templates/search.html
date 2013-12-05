@@ -31,12 +31,19 @@
     {% else %}
 	 "{{movie['posters']['detailed']}}"
     {% endif %}
-	 height="270" width="170">
+	 height="270" width="180">
   </a>
   <div class="media-body">
     <!-- put text description, actors, etc here -->
     {% for castmem in movie['abridged_cast'] %}
-    {{castmem['name']}} as {% for name in castmem['characters'] %}{{name}}{% endfor %}, 
+    {{castmem['name']}},
+<!--    {% if castmem['characters'] != 0 %}
+    as 
+    {% for name in castmem['characters'] %}
+    {{name}}
+    {% endfor %}
+    , 
+    {% endif %}-->
     {% endfor %}
     ...
   </div>
