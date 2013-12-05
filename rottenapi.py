@@ -54,7 +54,8 @@ def cleanQuery(query):
 
 def reviewText(review):
 	try:
-		page = urllib2.urlopen(review['links']['review']).read()
+		link = review['links']['review'].replace(" ","%20")
+		page = urllib2.urlopen(link).read()
 	except urllib2.HTTPError:
 		return "404: " + review['publication']
 	except KeyError:

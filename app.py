@@ -34,14 +34,26 @@ def search(search_request=None):
 
 @app.route('/movie/<movie_name>')
 def movie(movie_name):
+	a = db.Author()
 	d = {'movie_name': movie_name}
+	
 	d['reviews'] = rottenapi.reviewsByName(movie_name)
 	d['texts'] = []
+	d['info'] = rottenapi.movieInfo(d['movie_name'])
 	for review in d['reviews']:
 		d['texts'].append(rottenapi.reviewText(review))
 	for text in d['texts']:
-		pass
-	return render_template('movie.html', d=d)
+		text.replace(". "," %s %s "%(doc.SQLes,doc.SQLss))
+		text.replace("! "," %s %s "%(doc.SQLes,doc.SQLss))
+		text.replace("? "," %s %s "%(doc.SQLes,doc.SQLss))
+		data = text.split(" ")
+		data.insert(0,doc.SQLss)
+		data.append(doc.SQLes)
+		i = 0
+		while i < len(data) - 3:
+			a.insert(data[i],data[i+1],data[i+2])
+	d['review'] = reviewer.generateSentenceWithGrammar(a.everything())
+	return render_template('movie.html', movieInfo=d)
 
 if __name__ == '__main__':
     app.debug = True

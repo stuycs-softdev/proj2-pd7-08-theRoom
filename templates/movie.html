@@ -2,21 +2,21 @@
 
 {% include "lib.html" %}
 
-<h3>{{ movieInfo['title']}} ({{movieInfo['year']}})</h3>
-<img border="0" src="{{movieInfo['posters']['detailed']}}" alt="detailed">
+<h3>{{ movieInfo['info']['title']}} ({{movieInfo['info']['year']}})</h3>
+<img border="0" src="{{movieInfo['info']['posters']['detailed']}}" alt="detailed">
 <br>
 
 <h2>Movie Info</h2>
-Genre(s): {% for genre in movieInfo['genres']%} {{genre}}, {% endfor %}<br>
-Directors: {% for director in movieInfo['abridged_directors'] %} {{director['name']}}, {% endfor %}
+Genre(s): {% for genre in movieInfo['info']['genres']%} {{genre}}, {% endfor %}<br>
+Directors: {% for director in movieInfo['info']['abridged_directors'] %} {{director['name']}}, {% endfor %}
 <br>
-Cast: {% for actor in movieInfo['abridged_cast'] %} {{actor['name']}}, {% endfor %} <a href="{{movieInfo['links']['cast']}}">full cast</a>
+Cast: {% for actor in movieInfo['info']['abridged_cast'] %} {{actor['name']}}, {% endfor %} <a href="{{movieInfo['info']['links']['cast']}}">full cast</a>
 <br>
 
 
 
 <br>
-{% for r in reviews %}
+{% for text in movieInfo['reviews'] %}
   {{ text }}
 {% endfor %}
 <img border="0" src="http://i.imgur.com/cyO0KTQ.jpg">
