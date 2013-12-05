@@ -45,8 +45,10 @@ class Author:
 			self.sid = data[0]
 			self.table = self.TABLE_CHOICES
 		return data
-	def getWords(self):
-		i = self.db.execute("SELECT * FROM %s WHERE src = '%s'"%(self.TABLE_CHOICES,self.sid))
+	def getWords(self,pid = None):
+		if pid is None:
+			pid = self.sid
+		i = self.db.execute("SELECT * FROM %s WHERE src = '%s'"%(self.TABLE_CHOICES,pid))
 		return i.fetchall()
 	def selectWords(self,a,b):
 		i = self.db.execute("SELECT * FROM %s WHERE firstWord = '%s' AND secondWord = '%s'"%(self.TABLE_PAIRS,a,b))
@@ -90,8 +92,24 @@ class Author:
 			self.adjust("freq",1)
 		else:
 			self.selectWords(a,b)
-			self.db.execute(self.insertInto%(self.TABLE_CHOICES,"src,word,freq","'%s','%s','%s'"%(self.sid,c,0)))
+			self.db.execute(self.insertInto%(self.TABLE_CHOICES,"src,word,freq","'%s','%s','%s'"%(self.sid,c,1)))
 		return self
+	#everything
+	def everything(self):
+		ans = {}
+		sql = "SELECT * FROM %s"%self.TABLE_PAIRS
+		pairs = self.db.execute(sql).fetchall()
+		for pair in pairs:
+			first = pair[1]
+			second = pair[2]
+			self.selectWords(first,second)
+			choices = self.getWords()
+			formatted = {}
+			for choice in choices:
+				formatted[choice[2]] = choice[3]
+			ans[(first,second)] = formatted
+		return ans
+		
 	#adjust a value
 	def adjust(self,key,val):
 		self.db.execute(self.increment%(self.table,key,key,val,"pid",self.sid));
