@@ -7,6 +7,58 @@
   <h1>{{d['search_request']}}</h1>
 </div>
 
+<<<<<<< HEAD
+
+{% for movie in d['movies'] %}
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+
+    <a href="/movie/{{movie['id']}}">
+      {{movie['title']}}
+    </a>
+    {% if movie['year'] != "" %}
+    ({{movie['year']}})
+    {% endif %}
+  </div>
+  <div class="panel-body">
+
+
+<div class="media">
+  <a class="pull-left" href="#">
+    <img class="media-object" src=
+	 {% if movie['posters']['detailed'] == "http://images.rottentomatoescdn.com/images/redesign/poster_default.gif" %}
+	 "http://i.imgur.com/UXbU9lF.jpg"
+    {% else %}
+	 "{{movie['posters']['detailed']}}"
+    {% endif %}
+	 height="270" width="180">
+  </a>
+  <div class="media-body">
+    <!-- put text description, actors, etc here -->
+    {% for castmem in movie['abridged_cast'] %}
+    {{castmem['name']}},
+<!--    {% if castmem['characters'] != 0 %}
+    as 
+    {% for name in castmem['characters'] %}
+    {{name}}
+    {% endfor %}
+    , 
+    {% endif %}-->
+    {% endfor %}
+    ...
+  </div>
+</div>
+
+
+
+
+
+ 
+  </div>
+</div><br>
+
+=======
 <div id="searchresults">
 {% for movie in d['movies']['movies'] %}
 		{% if movie['posters']['detailed'] != "http://images.rottentomatoescdn.com/images/redesign/poster_default.gif" %}
@@ -22,6 +74,7 @@
 {% if loop.index is divisibleby 4 %}
 <br>
 {% endif %}
+>>>>>>> master
 
 {% endfor %}
 </div>
