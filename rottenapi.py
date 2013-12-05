@@ -64,54 +64,54 @@ def reviewText(review):
 	if review['publication'] == u'Village Voice':
 		page = page[page.find("<div class='content_body'"):]
 		page = page[len("<div class='content_body sm'><p>") : page.find("</div>")]
-		page = page.decode("UTF-8")
+		page = cleanHTML(page)
 		page = page.encode("ascii","ignore")
-		return cleanHTML(page)
+		return page
 
 	if review['publication'] == u'Chicago Reader':
 		tag = '<div class="filmShortBody" id="filmShortFull">'
 		endtag = '<span class="byline"'
 		page = page[page.find(tag) + len(tag) + 30 :]
 		page = page[: page.find(endtag) - 44]
-		page = page.decode("UTF-8")
+		page = cleanHTML(page)
 		page = page.encode("ascii","ignore")
-		return cleanHTML(page)
+		return page
 
 	if review['publication'] == u'Variety':
 		tag = '<!-- Start Article Post Content -->'
 		endtag = '\n<div'
 		page = page[page.find(tag) + len(tag) + 50 :]
 		page = page[: page.find(endtag)]
-		page = page.decode("UTF-8")
+		page = cleanHTML(page)
 		page = page.encode("ascii","ignore")
-		return cleanHTML(page)
+		return page
 	
 	if review['publication'] == u'New Yorker':
 		tag = '<p class="noindent">'
 		endtag = '</p>'
 		page = page[page.find(tag) + len(tag) :]
 		page = page[: page.find(endtag)]
-		page = page.decode("UTF-8")
+		page = cleanHTML(page)
 		page = page.encode("ascii","ignore")
-		return cleanHTML(page)
+		return page
 
 	if review['publication'] == u'CNN.com':
 		tag = '<p ><b><b>(CNN)</b></b> -- '
 		endtag = '<br /> </p><!'
 		page = page[page.find(tag) + len(tag) :]
 		page = page[: page.find(endtag)]
-		page = page.decode("UTF-8")
+		page = cleanHTML(page)
 		page = page.encode("ascii","ignore")
-		return cleanHTML(page)
+		return page
 	
 	if review['publication'] == u'The Wrap':
 		tag = '<div style="font-weight:bold;font-size:16px;"><p>'
 		endtag = '</div><!--content-area-->'
 		page = page[page.find(tag) + len(tag) :]
 		page = page[: page.find(endtag)]
-		page = page.decode("UTF-8")
+		cleanHTML(page)
 		page = page.encode("ascii","ignore")
-		return stripWhitespace(cleanHTML(page))
+		return stripWhitespace(page)
 	
 	#if review['publication'] == u'Passionate Moviegoer':
 	#	return "Not handled on purpose: multiple reviews on same page."
@@ -121,9 +121,10 @@ def reviewText(review):
 		endtag = '<p class="articleAuthor module"'
 		page = page[page.find(tag) + len(tag) + 23 :]
 		page = page[: page.find(endtag) - 10]
-		page = page.decode("UTF-8")
+		cleanHTML(page)
+		page = page.decode("UTF-8","ignore")
 		page = page.encode("ascii","ignore")
-		return stripWhitespace(cleanHTML(page))
+		return stripWhitespace(page)
 	
 	#if review['publication'] == u'Newsday':
 	#	return "Not handled on purpose: no solid tag."
@@ -148,7 +149,7 @@ def cleanHTML(text):
 		old_text = text
 		text = re.sub('<[^<]+?>', '', text)
 	parser = HTMLParser()
-	text = text.decode("utf8", "ignore")
+	text = text.decode("UTF-8","ignore")
 	return parser.unescape(text)
 
 def stripWhitespace(text):

@@ -29,8 +29,8 @@ def search(search_request=None):
 	d = {'search_request': search_request}
 	movies = rottenapi.searchMovies(search_request)
 	d['movies'] = movies
-	d['clean'] = rottenapi.cleanQuery
-
+	#d['clean'] = rottenapi.cleanQuery
+	#return d['search_request']
 	return render_template('search.html', d=d)
 
 @app.route('/movie/<movie_name>')
@@ -57,7 +57,8 @@ def movie(movie_name):
 	
 	i = 0
 	while i < REVIEW_LENGTH:
-		d['review'] += " " + reviewer.generateSentenceWithGrammar(a.everything())
+		print "writing"
+		d['review'] += " " + reviewer.generateSentenceWithGrammar(a.everything()) + "."
 		i += 1
 	return render_template('movie.html', movieInfo=d)
 
@@ -74,12 +75,17 @@ def saveText(text,a):
 	text = text.replace(". "," %s %s "%(doc.SQLes,doc.SQLss))
 	text = text.replace("! "," %s %s "%(doc.SQLes,doc.SQLss))
 	text = text.replace("? "," %s %s "%(doc.SQLes,doc.SQLss))
-	text = text.replace("\\n","")
-	text = text.replace("\\t","")
-	text = text.replace("\\r","")
-	text = text.replace("\n","")
-	text = text.replace("\t","")
-	text = text.replace("\r","")
+	text = text.replace("\\n"," ")
+	text = text.replace("\\t"," ")
+	text = text.replace("\\r"," ")
+	text = text.replace("\n"," ")
+	text = text.replace("\t"," ")
+	text = text.replace("\r"," ")
+	text = text.replace("\\x"," ")
+	text = text.replace("\\u2019","'")
+	text = text.replace("\u2019","'")
+	text = text.replace("\u"," ")
+	text = text.replace("\\u"," ")
 	data = text.split(" ")
 	data.insert(0,doc.SQLss)
 	data.append(doc.SQLes)
@@ -92,6 +98,7 @@ def saveText(text,a):
 	a.insert(data[i],data[i+1],doc.SQLes)
 	a.insert(data[i+1],doc.SQLes,doc.SQLes)
 	a.save()
+	print "saved"
 if __name__ == '__main__':
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
