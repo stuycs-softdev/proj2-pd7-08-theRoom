@@ -1,7 +1,9 @@
 from flask import Flask
 from flask import request, render_template, redirect, url_for
+from document import doc
+import db
 import rottenapi
-
+import reviewer
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -37,7 +39,8 @@ def movie(movie_name):
 	d['texts'] = []
 	for review in d['reviews']:
 		d['texts'].append(rottenapi.reviewText(review))
-
+	for text in d['texts']:
+		pass
 	return render_template('movie.html', d=d)
 
 if __name__ == '__main__':
