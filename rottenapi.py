@@ -57,6 +57,8 @@ def reviewText(review):
 		page = urllib2.urlopen(review['links']['review']).read()
 	except urllib2.HTTPError:
 		return "404: " + review['publication']
+	except KeyError:
+		return "No reviews found"
 
 	if review['publication'] == u'Village Voice':
 		page = page[page.find("<div class='content_body'"):]
@@ -125,13 +127,13 @@ def reviewText(review):
 	return "Not handled: " + review['publication']
 
 def cleanHTML(text):
-	print text
 	old_text = ''
 	text = string.replace(text, '<br />', ' ')
 	while text != old_text:
 		old_text = text
 		text = re.sub('<[^<]+?>', '', text)
 	parser = HTMLParser()
+	text = text.decode("utf8", "ignore")
 	return parser.unescape(text)
 
 def stripWhitespace(text):
