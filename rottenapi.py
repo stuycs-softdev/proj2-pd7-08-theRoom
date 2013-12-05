@@ -13,11 +13,12 @@ def getURL(apinode):
     url = apiroot + apinode + "&apikey=%s"%config.apikey
     return url
 
-# get a list of movies for the search_str
-def searchMovies(search_str):
-    results = urllib2.urlopen(getURL("movies.json?q=%s&page_limit=%d&page=%d"%(quote_plus(search_str),10,1)))
-    out = json.loads(results.read())
-    return out['movies']
+# get a list of movies for the query
+def searchMovies(query):
+	request = getURL("movies.json?q=%s"%cleanQuery(query))
+	results = urllib2.urlopen(request)
+	out = json.loads(results.read())
+	return out
 
 # get movie info for a movie id
 def movieInfo(movieID):
@@ -35,7 +36,7 @@ def castInfo(movieID):
 def reviews(movieID):
     results = urllib2.urlopen(getURL("movies/%s/reviews.json?review_type=top_critic"%movieID))
     out = json.loads(results.read())
-    return out
+    return out['reviews']
 
 # get similar movies for a movie id
 def similarMovies(movieID):
@@ -44,15 +45,20 @@ def similarMovies(movieID):
     return out
 
 def reviewsByName(movie_name):
-	movies = searchMovies(movie_name)
+	movies = searchMovies(movie_name)['movies']
 	movieID = movies[0]['id']
 	return reviews(movieID)
+
+def cleanQuery(query):
+	return query.replace(' ', '%20')
 
 def reviewText(review):
 	try:
 		page = urllib2.urlopen(review['links']['review']).read()
 	except urllib2.HTTPError:
 		return "404: " + review['publication']
+	except KeyError:
+		return "No reviews found"
 
 	if review['publication'] == u'Village Voice':
 		page = page[page.find("<div class='content_body'"):]
@@ -104,7 +110,20 @@ def reviewText(review):
 		page = page[: page.find(endtag) - 10]
 		return stripWhitespace(cleanHTML(page))
 	
-	print review
+	if review['publication'] == u'Newsday':
+		return "Not handled on purpose: no solid tag."
+
+	if review['publication'] == u'Richard Roeper.com':
+		return "Not handled on purpose: video reviews."
+	
+	if review['publication'] == u'Wall Street Journal':
+		return "Not handled on purpose: no solid tag."
+
+	if review['publication'] == u'San Francisco Chronicle':
+		return "Not handled on purpose: redirect."
+
+	#if review['publication'] == u'Film.com':
+	
 	return "Not handled: " + review['publication']
 
 def cleanHTML(text):
@@ -114,6 +133,7 @@ def cleanHTML(text):
 		old_text = text
 		text = re.sub('<[^<]+?>', '', text)
 	parser = HTMLParser()
+	text = text.decode("utf8", "ignore")
 	return parser.unescape(text)
 
 def stripWhitespace(text):
@@ -124,5 +144,4 @@ if __name__ == '__main__':
     movieID = movies[0]['id']
     reviews = reviews(movieID)
     for review in reviews['reviews']:
-    	if review['publication'] == u'Time Out':
-    		print reviewText(review)
+    	print reviewText(review)
