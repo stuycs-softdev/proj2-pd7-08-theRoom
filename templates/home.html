@@ -1,6 +1,8 @@
 {% include "lib.html" %}
 
 <div id="searchbar">
+	<span class="center"> Your Reviewer: </span>
+	<img src="{{url_for('static', filename = 'img/cricketiminals2bi.gif')}}"/>
     <form method='POST'>
         <input type='text' placeholder='Movie...' name='search_request' />
         <br>
