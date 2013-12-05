@@ -46,6 +46,7 @@ def movie(movie_name):
 		print "trying to read here"
 		text = rottenapi.reviewText(review)
 		if text is not None:
+			print "solid read"
 			d['texts'].append(text)
 		else:
 			print "couldnt read that one"

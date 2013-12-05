@@ -62,7 +62,7 @@ def generateReview(movie_id):
 
 def generateSentenceWithGrammar(corpus,getNext):
     max_len = 20
-    sentence = generateSentence(corpus)
+    sentence = generateSentence(corpus,getNext)
     while len(sentence.split(' ')) > max_len:
         sentence = generateSentence(corpus,getNext)
     return sentence

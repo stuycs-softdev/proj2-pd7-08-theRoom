@@ -5,6 +5,7 @@ import json
 import config
 import re
 import string
+import socket
 
 apiroot = "http://api.rottentomatoes.com/api/public/v1.0/"
 
@@ -54,14 +55,20 @@ def cleanQuery(query):
 
 def reviewText(review):
 	try:
+		print "lets open this baby up"
 		link = review['links']['review'].replace(" ","%20")
-		page = urllib2.urlopen(link).read()
+		page = urllib2.urlopen(link,None,1).read()
 	except urllib2.HTTPError:
 		return None
 	except KeyError:
 		return None
-
+	except urllib2.URLError:
+		return None
+	except socket.timeout:
+		return None
+	print "alright what do we have here"
 	if review['publication'] == u'Village Voice':
+		print "its the voice"
 		page = page[page.find("<div class='content_body'"):]
 		page = page[len("<div class='content_body sm'><p>") : page.find("</div>")]
 		page = cleanHTML(page)
@@ -69,6 +76,7 @@ def reviewText(review):
 		return page
 
 	if review['publication'] == u'Chicago Reader':
+		
 		tag = '<div class="filmShortBody" id="filmShortFull">'
 		endtag = '<span class="byline"'
 		page = page[page.find(tag) + len(tag) + 30 :]
