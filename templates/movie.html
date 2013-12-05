@@ -1,4 +1,4 @@
-<h4> This is the page for the review </h4>
+<h4> <a href="/home/"> This is the page for the review </a></h4>
 
 {% include "lib.html" %}
 <div class="panel panel-primary">
@@ -40,7 +40,7 @@
     {% endfor %}
     <br>
 	<p>
-		{{movieInfo['review']}}
+		{{movieInfo['review']|safe}}
 	</p>
     <!--insert review(s) here-->
   </div>
