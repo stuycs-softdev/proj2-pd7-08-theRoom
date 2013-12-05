@@ -9,10 +9,10 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <div class="jumbotron">
-      {{movieInfo['title']}
+      {{movieInfo['info']['title']}}
       </div>
-    {% if movie['year'] != "" %}
-    ({{movie['year']}})
+    {% if movieInfo['info']['year'] != "" %}
+    ({{movieInfo['info']['year']}})
     {% endif %}
   </div>
   <div class="panel-body">
@@ -20,19 +20,19 @@
 
 <div class="media">
   <a class="pull-left" href="#">
-    <img class="media-object" src="{{movieInfo['posters']['original']}}" height="810" width="540">
+    <img class="media-object" src="{{movieInfo['info']['posters']['original']}}" height="810" width="540">
   </a>
   <div class="media-body">
 
     <h2>Movie Info</h2>
-    Genre(s): {% for genre in movieInfo['genres']%} {{genre}}, {% endfor %}<br>
-    Directors: {% for director in movieInfo['abridged_directors'] %} {{director['name']}}, {% endfor %}
+    Genre(s): {% for genre in movieInfo['info']['genres']%} {{genre}}, {% endfor %}<br>
+    Directors: {% for director in movieInfo['info']['abridged_directors'] %} {{director['name']}}, {% endfor %}
     <br>
-    MPAA Rating: {{movieInfo['rating']}}<br>
+    MPAA Rating: {{movieInfo['info']['rating']}}<br>
 
 
     <!-- put text description, actors, etc here -->
-    {% for castmem in movie['abridged_cast'] %}
+    {% for castmem in movieInfo['info']['abridged_cast'] %}
     {{castmem['name']}}
 
     {% if castmem['characters'] is defined %}
@@ -44,6 +44,9 @@
     {% endif %}
     {% endfor %}
     <br>
+	<p>
+		{{movieInfo['review']}}
+	</p>
     <!--insert review(s) here-->
   </div>
 </div>
