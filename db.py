@@ -58,7 +58,11 @@ class Author:
 			self.sid = data[0]
 			self.table = self.TABLE_PAIRS
 		return data
-	
+	def getPairs(self,a):
+		i = self.db.execute("SELECT firstWord,secondWord FROM %s WHERE firstWord = ? "%(self.TABLE_PAIRS),(a,b))
+		data = i.fetchall()
+		return data
+		
 	#resets db
 	def reset(self):
 		self.dropTable(self.TABLE_PAIRS)
