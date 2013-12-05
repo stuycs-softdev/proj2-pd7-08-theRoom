@@ -64,6 +64,8 @@ def reviewText(review):
 	if review['publication'] == u'Village Voice':
 		page = page[page.find("<div class='content_body'"):]
 		page = page[len("<div class='content_body sm'><p>") : page.find("</div>")]
+		page = page.decode("UTF-8")
+		page = page.encode("ascii","ignore")
 		return cleanHTML(page)
 
 	if review['publication'] == u'Chicago Reader':
@@ -71,6 +73,8 @@ def reviewText(review):
 		endtag = '<span class="byline"'
 		page = page[page.find(tag) + len(tag) + 30 :]
 		page = page[: page.find(endtag) - 44]
+		page = page.decode("UTF-8")
+		page = page.encode("ascii","ignore")
 		return cleanHTML(page)
 
 	if review['publication'] == u'Variety':
@@ -78,6 +82,8 @@ def reviewText(review):
 		endtag = '\n<div'
 		page = page[page.find(tag) + len(tag) + 50 :]
 		page = page[: page.find(endtag)]
+		page = page.decode("UTF-8")
+		page = page.encode("ascii","ignore")
 		return cleanHTML(page)
 	
 	if review['publication'] == u'New Yorker':
@@ -85,6 +91,8 @@ def reviewText(review):
 		endtag = '</p>'
 		page = page[page.find(tag) + len(tag) :]
 		page = page[: page.find(endtag)]
+		page = page.decode("UTF-8")
+		page = page.encode("ascii","ignore")
 		return cleanHTML(page)
 
 	if review['publication'] == u'CNN.com':
@@ -92,6 +100,8 @@ def reviewText(review):
 		endtag = '<br /> </p><!'
 		page = page[page.find(tag) + len(tag) :]
 		page = page[: page.find(endtag)]
+		page = page.decode("UTF-8")
+		page = page.encode("ascii","ignore")
 		return cleanHTML(page)
 	
 	if review['publication'] == u'The Wrap':
@@ -99,6 +109,8 @@ def reviewText(review):
 		endtag = '</div><!--content-area-->'
 		page = page[page.find(tag) + len(tag) :]
 		page = page[: page.find(endtag)]
+		page = page.decode("UTF-8")
+		page = page.encode("ascii","ignore")
 		return stripWhitespace(cleanHTML(page))
 	
 	#if review['publication'] == u'Passionate Moviegoer':
@@ -109,6 +121,8 @@ def reviewText(review):
 		endtag = '<p class="articleAuthor module"'
 		page = page[page.find(tag) + len(tag) + 23 :]
 		page = page[: page.find(endtag) - 10]
+		page = page.decode("UTF-8")
+		page = page.encode("ascii","ignore")
 		return stripWhitespace(cleanHTML(page))
 	
 	#if review['publication'] == u'Newsday':

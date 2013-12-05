@@ -44,7 +44,11 @@ def movie(movie_name):
 	d['info'] = rottenapi.movieInfo(d['movie_name'])
 	for review in d['reviews']:
 		print "trying to read here"
-		d['texts'].append(rottenapi.reviewText(review))
+		text = rottenapi.reviewText(review)
+		if text is not None:
+			d['texts'].append(text)
+		else:
+			print "couldnt read that one"
 	print "Done reading"
 	for text in d['texts']:
 		saveText(text,a)
@@ -53,7 +57,6 @@ def movie(movie_name):
 	
 	i = 0
 	while i < REVIEW_LENGTH:
-		
 		d['review'] += " " + reviewer.generateSentenceWithGrammar(a.everything())
 		i += 1
 	return render_template('movie.html', movieInfo=d)
