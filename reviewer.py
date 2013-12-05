@@ -46,7 +46,7 @@ def generateCorpus(text, corpus=None):
     return chain
 
 
-def generateSentence(corpus,getNext):
+def generateSentence(corpus,getNext,maxLength):
     pick = [END, END];
     while pick[0] != START:
         pick = choice(corpus)
@@ -55,16 +55,18 @@ def generateSentence(corpus,getNext):
         if pick[1] != START:
             sentence += str(pick[1]) + " " 
         pick = (pick[1], choice(weightedListofKeys(getNext(pick))))
+	if len(sentence.split(" ")) > maxLength:
+		return None
     return sentence
 
 def generateReview(movie_id):
     return "something something ipsum"
 
 def generateSentenceWithGrammar(corpus,getNext):
-    max_len = 20
-    sentence = generateSentence(corpus,getNext)
-    while len(sentence.split(' ')) > max_len:
-        sentence = generateSentence(corpus,getNext)
+    max_len = 30
+    sentence = generateSentence(corpus,getNext,max_len)
+    while sentence is None or len(sentence.split(' ')) > max_len:
+        sentence = generateSentence(corpus,getNext,max_len)
     return sentence
 
 corpus = None

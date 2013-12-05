@@ -4,6 +4,7 @@ from document import doc
 import db
 import rottenapi
 import reviewer
+import averagelength
 app = Flask(__name__)
 REVIEW_LENGTH = 20 #sentences
 
@@ -32,6 +33,7 @@ def search(search_request=None):
 	#d['clean'] = rottenapi.cleanQuery
 	#return d['search_request']
 	return render_template('search.html', d=d)
+
 
 @app.route('/movie/<movie_name>')
 def movie(movie_name):
@@ -71,6 +73,10 @@ def debug():
 	saveText("The quick Brown Fox jumped. Fire baby, fire.",a)
 	saveText("When i ran to the quick supermarket I saw an explosive donkey making honking noises at my family whowere on fire because the Brown Fox had shot them.",a)
 	return reviewer.generateSentenceWithGrammar(a.everything())
+
+@app.route('/debug/average/')
+def debugAverage():
+	return averagelength.takeAverage(30)
 
 def saveText(text,a):
 	text = text.replace(". "," %s %s "%(doc.SQLes,doc.SQLss))
