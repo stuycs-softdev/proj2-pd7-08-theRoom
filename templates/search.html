@@ -9,8 +9,9 @@
 
 <div id="searchresults">
 {% for movie in d['movies']['movies'] %}
-<a href=/movie/{{ movie['id'] }}>
+
 {% if movie['posters']['detailed'] != "http://images.rottentomatoescdn.com/images/redesign/poster_default.gif" %}
+<a href=/movie/{{ movie['id'] }}>
 <img class="searchresult" src=
 {{ movie['posters']['detailed'] }}
 ></img>
