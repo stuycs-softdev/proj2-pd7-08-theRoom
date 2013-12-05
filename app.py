@@ -39,7 +39,7 @@ def movie(movie_name):
 	a = db.Author()
 	d = {'movie_name': movie_name}
 	
-	d['reviews'] = rottenapi.reviewsByName(movie_name)
+	d['reviews'] = rottenapi.reviews(movie_name)
 	d['texts'] = []
 	d['info'] = rottenapi.movieInfo(d['movie_name'])
 	for review in d['reviews']:
